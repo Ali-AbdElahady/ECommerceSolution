@@ -27,6 +27,7 @@ namespace Web
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
