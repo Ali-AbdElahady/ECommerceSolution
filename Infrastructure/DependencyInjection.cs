@@ -1,7 +1,9 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Behaviours;
 using ECommerceSolution.Infrastructure.Identity;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +13,11 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.Settings;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure
 {
@@ -21,6 +26,8 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection Services, IConfiguration configuration)
         {
             Services.AddScoped<IIdentityService, IdentityService>();
+            Services.AddScoped<ApplicationDbContextInitialiser>();
+            Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
             Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(
                                                                 configuration.GetConnectionString("DefaultConnection"),
@@ -29,6 +36,14 @@ namespace Infrastructure
             Services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
+
+            Services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
+            });
 
             Services.AddAuthentication(options =>
                                                 {
@@ -49,6 +64,10 @@ namespace Infrastructure
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]))
                     };
                 });
+
+            Services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            Services.AddSingleton(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);
+
             Services.AddAuthorization();
             return Services;
         }

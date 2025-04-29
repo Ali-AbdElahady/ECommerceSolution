@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Common.Interfaces;
+using Domain.Entities;
 using ECommerceSolution.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser> , IApplicationDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
         {

@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -26,6 +27,24 @@ namespace Web.Controllers
             }
 
             return Ok(userId);
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var token = await _identityService.GenerateJwtTokenAsync(request.Email, request.Password);
+
+            if (token == null)
+            {
+                return Unauthorized(new
+                {
+                    Message = "Invalid credentials"
+                });
+            }
+
+            return Ok(new
+            {
+                Token = token
+            });
         }
     }
 }

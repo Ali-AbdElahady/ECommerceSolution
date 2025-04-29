@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Identity.Extentions;
+using Application.DTOs.Order;
 
 namespace Infrastructure.Identity
 {
@@ -105,5 +106,27 @@ namespace Infrastructure.Identity
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<string> GetUserEmailByIdAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return user?.Email;
+        }
+        public async Task<CustomerDto> GetUserByIdAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                return null;
+
+            return new CustomerDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber
+            };
+        }
+
     }
 }
