@@ -1,5 +1,4 @@
 ﻿using Application.Common.Interfaces;
-using Application.Common.Behaviours;
 using ECommerceSolution.Infrastructure.Identity;
 using Infrastructure.Data;
 using Infrastructure.Identity;
@@ -18,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Settings;
 using Microsoft.Extensions.Options;
+using Application.Common.Behaviours;
 
 namespace Infrastructure
 {

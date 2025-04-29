@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Order.Commands;
 using Application.Order.Queries;
 using Microsoft.OpenApi.Models;
 
@@ -10,6 +11,7 @@ namespace Web.Services
         {
             Services.AddScoped<IUser, CurrentUser>();
             Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllOrdersQueryHandler).Assembly));
+            Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ConfirmShippingCommand).Assembly));
 
             Services.AddSwaggerGen(options =>
             {

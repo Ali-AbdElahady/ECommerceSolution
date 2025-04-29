@@ -1,11 +1,13 @@
 ﻿using Application.DTOs.Order;
 using Application.DTOs.Product;
+using Application.Order.Commands;
 using Application.Order.Queries;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace Web.Controllers
 {
     [Route("api/[controller]")]
@@ -20,10 +22,16 @@ namespace Web.Controllers
         // Only Sales Managers can confirm shipping
         [HttpPost("confirm-shipping")]
         [Authorize(Roles = Roles.SalesManager)]
-        public IActionResult ConfirmShipping([FromBody] OrderDto order)
+        public async Task<IActionResult> ConfirmShipping([FromBody] ConfirmShippingCommand order)
         {
-            // SalesManager role-specific logic here
-            return Ok();
+            var result = await _mediator.Send(order);
+
+            if (!result)
+            {
+                return BadRequest(new { Message = "Order not found or already shipped." });
+            }
+
+            return Ok(new { Message = "Order shipping confirmed successfully." });
         }
 
         [HttpGet("orders")]
