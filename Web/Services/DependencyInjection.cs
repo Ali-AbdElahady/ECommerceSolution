@@ -12,6 +12,7 @@ namespace Web.Services
         public static IServiceCollection AddWebServices(this IServiceCollection Services)
         {
             Services.AddScoped<IUser, CurrentUser>();
+            Services.AddScoped<IFileService, FileService>();
             Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllOrdersQueryHandler).Assembly));
             Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ConfirmShippingCommand).Assembly));
             Services.AddValidatorsFromAssembly(typeof(ConfirmShippingCommandValidator).Assembly);

@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.DTOs.Product;
 using Application.Products.Queries.GetProductById;
 using Domain.Entities;
