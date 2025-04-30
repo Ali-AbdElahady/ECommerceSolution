@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Product;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Products.Commands.AddProduct
 {

@@ -2,6 +2,8 @@
 using Application.Order.Commands;
 using Application.Order.Queries;
 using Application.Products.Commands.AddProduct;
+using Application.Products.Queries;
+using Application.Products.Queries.GetProductById;
 using FluentValidation;
 using Microsoft.OpenApi.Models;
 
@@ -13,10 +15,8 @@ namespace Web.Services
         {
             Services.AddScoped<IUser, CurrentUser>();
             Services.AddScoped<IFileService, FileService>();
-            Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllOrdersQueryHandler).Assembly));
-            Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ConfirmShippingCommand).Assembly));
-            Services.AddValidatorsFromAssembly(typeof(ConfirmShippingCommandValidator).Assembly);
-            Services.AddValidatorsFromAssembly(typeof(AddProductCommandValidator).Assembly);
+            
+            
 
 
             Services.AddSwaggerGen(options =>

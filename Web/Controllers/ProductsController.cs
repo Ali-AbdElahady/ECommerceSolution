@@ -26,24 +26,7 @@ namespace Web.Controllers
         [Authorize(Roles = Roles.InventoryManager)]
         public async Task<IActionResult> AddProduct([FromForm] AddProductDto addProductDto)
         {
-            if (addProductDto.Images == null || addProductDto.Images.Count == 0)
-            {
-                return BadRequest("No images were uploaded.");
-            }
 
-            var imagePaths = new List<string>();
-
-            foreach (var image in addProductDto.Images)
-            {
-                // Save each image and get the file path
-                var imagePath = await _fileService.SaveImageAsync(image);
-                imagePaths.Add(imagePath);
-            }
-
-            // Update the DTO with the saved image paths
-            addProductDto.Images = imagePaths;
-
-            // Now proceed to send the DTO to a command or service
             var productId = await _mediator.Send(new AddProductCommand(addProductDto));
 
             return CreatedAtAction(nameof(GetProductById), new { id = productId }, addProductDto);

@@ -17,6 +17,14 @@ namespace Infrastructure.Data.Configurations
             builder.HasOne(p => p.ProductCategory)
                     .WithMany(c => c.Products)
                     .HasForeignKey(p => p.ProductCategoryId);
+            builder.HasMany(p => p.Images)
+                    .WithOne(i => i.Product)
+                    .HasForeignKey(i => i.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(p => p.Options)
+                    .WithOne(o => o.Product)
+                    .HasForeignKey(o => o.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -20,6 +20,9 @@ namespace Web
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             await app.InitialiseDatabaseAsync();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

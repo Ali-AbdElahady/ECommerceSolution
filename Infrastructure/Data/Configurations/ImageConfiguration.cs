@@ -13,7 +13,9 @@ namespace Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Image> builder)
         {
-            builder.HasOne(i => i.Product).WithMany(p => p.Images).HasForeignKey(p => p.ProdcutId);
+            builder.HasOne(i => i.Product)
+                .WithMany(p => p.Images)
+                .HasForeignKey(p => p.ProductId);
         }
     }
 }

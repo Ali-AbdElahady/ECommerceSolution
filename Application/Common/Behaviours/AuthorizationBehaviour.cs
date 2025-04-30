@@ -28,7 +28,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             // Must be authenticated user
             if (_user.Id == null)
             {
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedException(); // ✅ custom exception, not System
             }
 
             // Role-based authorization
@@ -51,7 +51,6 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
                     }
                 }
 
-                // Must be a member of at least one role in roles
                 if (!authorized)
                 {
                     throw new ForbiddenAccessException();
@@ -74,7 +73,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             }
         }
 
-        // User is authorized / authorization not required
         return await next();
     }
+
 }

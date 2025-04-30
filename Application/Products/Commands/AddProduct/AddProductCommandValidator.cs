@@ -25,6 +25,13 @@ namespace Application.Products.Commands.AddProduct
                     option.RuleFor(o => o.Price)
                         .GreaterThan(0).WithMessage("Option price must be greater than zero.");
                 });
+
+            RuleFor(x => x.Product.Images)
+                .NotNull().WithMessage("At least one image must be uploaded.")
+                .Must(images => images != null && images.Any()).WithMessage("At least one image must be uploaded.");
+
+            RuleForEach(x => x.Product.Images)
+                .NotEmpty().WithMessage("Image path cannot be empty.");
         }
     }
 }

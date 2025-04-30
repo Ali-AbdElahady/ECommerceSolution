@@ -13,9 +13,17 @@ namespace Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductOption> builder)
         {
-            builder.HasOne(po => po.Product)
+            builder.Property(o => o.Price)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+            builder.Property(o => o.Stock)
+                    .IsRequired();
+
+            builder.HasOne(o => o.Product)
                     .WithMany(p => p.Options)
-                    .HasForeignKey(po => po.ProductId);
+                    .HasForeignKey(o => o.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

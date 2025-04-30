@@ -9,15 +9,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using Application.Common.Behaviours;
+using Application.Order.Commands;
+using Application.Order.Queries;
+using Application.Products.Commands.AddProduct;
+using Application.Products.Queries;
+using FluentValidation;
+using System.Reflection;
+using Microsoft.AspNetCore.Http;
+using System.Net;
+using System.Text.Json;
 
 namespace Infrastructure
 {
@@ -37,13 +41,26 @@ namespace Infrastructure
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
-            Services.AddMediatR(cfg => {
-                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            Services.AddValidatorsFromAssemblyContaining<AddProductCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<ConfirmShippingCommandValidator>();
+
+            Services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblies(
+                    typeof(GetAllOrdersQueryHandler).Assembly,
+                    typeof(ConfirmShippingCommandHandler).Assembly,
+                    typeof(AddProductCommandHandler).Assembly,
+                    typeof(GetProductByIdQueryHandler).Assembly
+                );
+
+                // Add all the pipeline behaviors
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             });
+
+
 
             Services.AddAuthentication(options =>
                                                 {
@@ -62,6 +79,20 @@ namespace Infrastructure
                         ValidIssuer = jwtSettings["Issuer"],
                         ValidAudience = jwtSettings["Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]))
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            context.NoResult(); // Stop the default behavior
+
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            context.Response.ContentType = "application/json";
+
+                            var result = JsonSerializer.Serialize(new { message = "Invalid or expired token." });
+                            return context.Response.WriteAsync(result);
+                        }
                     };
                 });
 

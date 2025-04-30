@@ -16,24 +16,40 @@ public class FileService : IFileService
 
     public async Task<string> SaveImageAsync(IFormFile image)
     {
-        // Ensure the uploads folder exists
+        
+        if (image == null || image.Length == 0)
+            throw new ArgumentException("No file uploaded.");
+
+        
+        var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/bmp", "image/webp" };
+        if (!allowedContentTypes.Contains(image.ContentType.ToLower()))
+            throw new ArgumentException("Invalid file type. Only image files are allowed.");
+
+        
+        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
+        var fileExtension = Path.GetExtension(image.FileName).ToLower();
+        if (!allowedExtensions.Contains(fileExtension))
+            throw new ArgumentException("Invalid file extension. Only image files are allowed.");
+
+        
         var uploadFolder = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "images");
         if (!Directory.Exists(uploadFolder))
         {
             Directory.CreateDirectory(uploadFolder);
         }
 
-        // Generate a unique file name using GUID to avoid conflicts
-        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+        
+        var fileName = Guid.NewGuid().ToString() + fileExtension;
         var filePath = Path.Combine(uploadFolder, fileName);
 
-        // Save the file to the server
+        
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
             await image.CopyToAsync(fileStream);
         }
 
-        // Return the relative file path to save in the database
+        
         return "/images/" + fileName;
     }
+
 }
