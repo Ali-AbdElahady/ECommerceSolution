@@ -1,6 +1,8 @@
 ﻿using Application.Common.Interfaces;
 using Application.Order.Commands;
 using Application.Order.Queries;
+using Application.Products.Commands.AddProduct;
+using FluentValidation;
 using Microsoft.OpenApi.Models;
 
 namespace Web.Services
@@ -12,12 +14,14 @@ namespace Web.Services
             Services.AddScoped<IUser, CurrentUser>();
             Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllOrdersQueryHandler).Assembly));
             Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ConfirmShippingCommand).Assembly));
+            Services.AddValidatorsFromAssembly(typeof(ConfirmShippingCommandValidator).Assembly);
+            Services.AddValidatorsFromAssembly(typeof(AddProductCommandValidator).Assembly);
+
 
             Services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ecommerce with Clean Architecture", Version = "v1" });
 
-                // 🔹 Enable JWT Authentication in Swagger
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

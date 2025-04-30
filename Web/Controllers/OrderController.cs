@@ -48,14 +48,6 @@ namespace Web.Controllers
             return Ok(orders);
         }
 
-        // Only Inventory Managers can add new products
-        [HttpPost("add-product")]
-        [Authorize(Roles = Roles.InventoryManager)]
-        public IActionResult AddProduct([FromBody] ProductDto product)
-        {
-            // InventoryManager role-specific logic here
-            return Ok();
-        }
 
         // Any authenticated client can place an order
         [HttpPost("place-order")]
