@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Application.Products.Queries.GetProductById;
 namespace Web.Controllers
 {
     [Route("api/[controller]")]
@@ -27,10 +28,11 @@ namespace Web.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = Roles.InventoryManager)]
         public async Task<IActionResult> GetProductById(int id)
         {
-            // Placeholder for later implementation
-            return Ok();
+            var productDto = await _mediator.Send(new GetProductByIdQuery(id));
+            return Ok(productDto);
         }
     }
 }
