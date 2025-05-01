@@ -18,10 +18,15 @@ using Application.Order.Queries;
 using Application.Products.Commands.AddProduct;
 using Application.Products.Queries;
 using FluentValidation;
-using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Text.Json;
+using Application.Srock.Commands.AddStock;
+using Application.Srock.Commands.ReleaseStock;
+using Application.Srock.Commands.ReserveStock;
+using Application.Srock.Commands.UpdateStock;
+using Application.Srock.Commands.RedeceStock;
+using Application.Srock.Queries;
 
 namespace Infrastructure
 {
@@ -43,14 +48,30 @@ namespace Infrastructure
 
             Services.AddValidatorsFromAssemblyContaining<AddProductCommandValidator>();
             Services.AddValidatorsFromAssemblyContaining<ConfirmShippingCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<UpdateStockCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<ReserveStockCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<ReleaseStockCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<AddStockCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<ReduceStockCommandValidator>();
+
+
 
             Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssemblies(
                     typeof(GetAllOrdersQueryHandler).Assembly,
+                    typeof(GetProductByIdQueryHandler).Assembly,
                     typeof(ConfirmShippingCommandHandler).Assembly,
                     typeof(AddProductCommandHandler).Assembly,
-                    typeof(GetProductByIdQueryHandler).Assembly
+                    typeof(AddStockCommandHandler).Assembly,
+                    typeof(ReserveStockCommandHandler).Assembly,
+                    typeof(UpdateStockCommandHandler).Assembly,
+                    typeof(ReleaseStockCommandHandler).Assembly,
+                    typeof(ReduceStockCommandHandler).Assembly,
+                    typeof(GetStockQuery).Assembly
+
+
+
                 );
 
                 // Add all the pipeline behaviors

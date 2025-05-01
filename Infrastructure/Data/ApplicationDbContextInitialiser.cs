@@ -76,6 +76,7 @@ namespace Infrastructure.Data
             await SeedUsersAsync();
             await SeedCategoriesAsync();
             await SeedProductsAsync();
+            await SeedStockAsync();
             await SeedOrdersAsync();
         }
 
@@ -179,10 +180,10 @@ namespace Infrastructure.Data
             },
                     Options = new List<ProductOption>
             {
-                new ProductOption { Size = "S", Price = 19.99m , Stock = 5 },
-                new ProductOption { Size = "M", Price = 19.99m, Stock = 5 },
-                new ProductOption { Size = "L", Price = 19.99m , Stock = 5},
-                new ProductOption { Size = "XL", Price = 19.99m, Stock = 5 }
+                new ProductOption { Size = "S", Price = 19.99m  },
+                new ProductOption { Size = "M", Price = 19.99m },
+                new ProductOption { Size = "L", Price = 19.99m },
+                new ProductOption { Size = "XL", Price = 19.99m }
             }
                 };
 
@@ -197,10 +198,10 @@ namespace Infrastructure.Data
             },
                     Options = new List<ProductOption>
             {
-                new ProductOption { Size = "40", Price = 79.99m, Stock = 5 },
-                new ProductOption { Size = "41", Price = 79.99m, Stock = 5 },
-                new ProductOption { Size = "42", Price = 79.99m, Stock = 5 },
-                new ProductOption { Size = "43", Price = 79.99m, Stock = 5 }
+                new ProductOption { Size = "40", Price = 79.99m },
+                new ProductOption { Size = "41", Price = 79.99m },
+                new ProductOption { Size = "42", Price = 79.99m },
+                new ProductOption { Size = "43", Price = 79.99m }
             }
                 };
 
@@ -215,11 +216,28 @@ namespace Infrastructure.Data
             },
                     Options = new List<ProductOption>
             {
-                new ProductOption { Size = "One Size", Price = 49.99m, Stock = 5 }
+                new ProductOption { Size = "One Size", Price = 49.99m }
             }
                 };
 
                 _context.Set<Product>().AddRange(tShirt, sneakers, backpack);
+                await _context.SaveChangesAsync();
+            }
+        }
+        private async Task SeedStockAsync()
+        {
+            if (!_context.Set<Stock>().Any())
+            {
+                var productOptions = _context.Set<ProductOption>().ToList();
+
+                var stockList = productOptions.Select(option => new Stock
+                {
+                    ProductOptionId = option.Id,
+                    Quantity = 100,      // Example default quantity
+                    Reserved = 0         // Initially nothing reserved
+                }).ToList();
+
+                _context.Set<Stock>().AddRange(stockList);
                 await _context.SaveChangesAsync();
             }
         }
