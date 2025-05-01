@@ -2,11 +2,11 @@
 using Application.Products.Commands.AddProduct;
 using Domain.Constants;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Application.Products.Queries.GetProductById;
 using Application.Common.Interfaces;
+using Application.Products.Queries.GetProducts;
 namespace Web.Controllers
 {
     [Route("api/[controller]")]
@@ -33,11 +33,17 @@ namespace Web.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = Roles.InventoryManager)]
         public async Task<IActionResult> GetProductById(int id)
         {
             var productDto = await _mediator.Send(new GetProductByIdQuery(id));
             return Ok(productDto);
+        }
+
+        [HttpGet("products")]
+        public async Task<IActionResult> GetProducts([FromQuery] ProductFilterDto filter)
+        {
+            var result = await _mediator.Send(new ProductsQuery(filter));
+            return Ok(result);
         }
     }
 }

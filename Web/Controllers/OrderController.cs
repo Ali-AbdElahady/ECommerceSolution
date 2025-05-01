@@ -2,6 +2,7 @@
 using Application.DTOs.Product;
 using Application.Order.Commands;
 using Application.Order.Queries;
+using Application.Orders.Commands.CreateOrder;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -52,10 +53,10 @@ namespace Web.Controllers
         // Any authenticated client can place an order
         [HttpPost("place-order")]
         [Authorize(Roles = Roles.Client)]
-        public IActionResult PlaceOrder([FromBody] OrderDto order)
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
         {
-            // Client logic here
-            return Ok();
+            var orderId = await _mediator.Send(command);
+            return Ok(new { Message = "placed order successfully" });
         }
     }
 }

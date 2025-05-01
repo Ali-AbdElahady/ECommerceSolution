@@ -1,11 +1,12 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using Application.DTOs.Product;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Products.Queries.GetProducts
 {
-    public class ProductsQuery : IRequest<List<ProductDto>>
+    public class ProductsQuery : IRequest<PaginatedList<ProductDto>>
     {
         public ProductFilterDto Filter { get; set; }
 
@@ -14,7 +15,8 @@ namespace Application.Products.Queries.GetProducts
             Filter = filter;
         }
     }
-    public class ProductsQueryHandler  : IRequestHandler<ProductsQuery, List<ProductDto>>
+
+    public class ProductsQueryHandler : IRequestHandler<ProductsQuery, PaginatedList<ProductDto>>
     {
         private readonly IApplicationDbContext _context;
 
@@ -22,24 +24,19 @@ namespace Application.Products.Queries.GetProducts
         {
             _context = context;
         }
-        public async Task<List<ProductDto>> Handle(ProductsQuery request, CancellationToken cancellationToken)
+
+        public async Task<PaginatedList<ProductDto>> Handle(ProductsQuery request, CancellationToken cancellationToken)
         {
             var query = _context.Products
                 .Include(p => p.ProductCategory)
                 .AsQueryable();
 
-            // Filtering
             if (!string.IsNullOrWhiteSpace(request.Filter.Title))
-            {
                 query = query.Where(p => p.Title.Contains(request.Filter.Title));
-            }
 
             if (request.Filter.CategoryId.HasValue)
-            {
                 query = query.Where(p => p.ProductCategoryId == request.Filter.CategoryId.Value);
-            }
 
-            // Sorting
             switch (request.Filter.SortBy?.ToLower())
             {
                 case "title":
@@ -55,24 +52,24 @@ namespace Application.Products.Queries.GetProducts
                     break;
 
                 default:
-                    query = query.OrderBy(p => p.Title);
+                    query = query.OrderBy(p => p.Id);
                     break;
             }
 
-            // Pagination
-            query = query
-                .Skip((request.Filter.PageNumber - 1) * request.Filter.PageSize)
-                .Take(request.Filter.PageSize);
+            var dtoQuery = query.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Description = p.Description,
+                CategoryName = p.ProductCategory.Name
+            });
 
-            return await query
-                .Select(p => new ProductDto
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Description = p.Description,
-                    CategoryName = p.ProductCategory.Name
-                })
-                .ToListAsync(cancellationToken);
+            return await PaginatedList<ProductDto>.CreateAsync(
+                dtoQuery,
+                request.Filter.PageNumber,
+                request.Filter.PageSize);
         }
     }
+
+
 }

@@ -27,6 +27,8 @@ using Application.Srock.Commands.ReserveStock;
 using Application.Srock.Commands.UpdateStock;
 using Application.Srock.Commands.RedeceStock;
 using Application.Srock.Queries;
+using Application.Products.Queries.GetProducts;
+using Application.Orders.Commands.CreateOrder;
 
 namespace Infrastructure
 {
@@ -53,6 +55,9 @@ namespace Infrastructure
             Services.AddValidatorsFromAssemblyContaining<ReleaseStockCommandValidator>();
             Services.AddValidatorsFromAssemblyContaining<AddStockCommandValidator>();
             Services.AddValidatorsFromAssemblyContaining<ReduceStockCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<ProductFilterDtoValidator>();
+            Services.AddValidatorsFromAssemblyContaining<CreateOrderCommandValidator>();
+
 
 
 
@@ -68,7 +73,9 @@ namespace Infrastructure
                     typeof(UpdateStockCommandHandler).Assembly,
                     typeof(ReleaseStockCommandHandler).Assembly,
                     typeof(ReduceStockCommandHandler).Assembly,
-                    typeof(GetStockQuery).Assembly
+                    typeof(GetStockQuery).Assembly,
+                    typeof(ProductsQueryHandler).Assembly,
+                    typeof(CreateOrderCommandHandler).Assembly
 
 
 
