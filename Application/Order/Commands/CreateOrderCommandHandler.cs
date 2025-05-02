@@ -1,6 +1,8 @@
 ﻿// CreateOrderCommandHandler.cs
 using Application.Common.Interfaces;
 using Application.DTOs.Order;
+using Application.DTOs.Stock;
+using Application.Srock.Commands.ReserveStock;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +19,11 @@ namespace Application.Orders.Commands.CreateOrder
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int>
     {
         private readonly IApplicationDbContext _context;
-
-        public CreateOrderCommandHandler(IApplicationDbContext context)
+        private readonly IMediator _mediator;
+        public CreateOrderCommandHandler(IApplicationDbContext context, IMediator mediator)
         {
-            _context = context;
+            _context = context; 
+            _mediator = mediator;
         }
 
         public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -43,6 +46,7 @@ namespace Application.Orders.Commands.CreateOrder
 
                 order.OrderItems.Add(new OrderItem
                 {
+                    ProductOptionId = item.OptionId,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
                     Price = option.Price
@@ -51,6 +55,21 @@ namespace Application.Orders.Commands.CreateOrder
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync(cancellationToken);
+
+            var reserveDtos = order.OrderItems.Select(oi => new ReserveStockDto
+            {
+                ProductOptionId = oi.ProductOptionId,
+                Quantity = oi.Quantity,
+                OrderId = order.Id
+            }).ToList();
+
+            var reserveResult = await _mediator.Send(new ReserveStockCommand(reserveDtos), cancellationToken);
+
+            if (!reserveResult)
+            {
+                throw new Exception("Unable to reserve stock for one or more items.");
+            }
+
             return order.Id;
         }
     }

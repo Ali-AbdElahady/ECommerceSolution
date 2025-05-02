@@ -23,13 +23,6 @@ namespace Web.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Roles = Roles.InventoryManager)]
-        [HttpPost("reserve-stock")]
-        public async Task<IActionResult> ReserveStock([FromBody] ReserveStockDto dto)
-        {
-            var result = await _mediator.Send(new ReserveStockCommand(dto));
-            return result ? Ok() : BadRequest("Not enough stock.");
-        }
 
         [Authorize(Roles = Roles.InventoryManager)]
         [HttpPost("add-stock")]

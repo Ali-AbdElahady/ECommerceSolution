@@ -259,12 +259,14 @@ namespace Infrastructure.Data
                         {
                             new OrderItem
                             {
+                                ProductOptionId = products[0].Options.First().Id,
                                 ProductId = products[0].Id,
                                 Quantity = 2,
                                 Price = products[0].Options.First().Price
                             },
                             new OrderItem
                             {
+                                ProductOptionId = products[1].Options.First().Id,
                                 ProductId = products[1].Id,
                                 Quantity = 1,
                                 Price = products[1].Options.First().Price

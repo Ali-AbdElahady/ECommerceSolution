@@ -1,17 +1,22 @@
 ﻿using Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
+using Application.DTOs.Stock;
+using Application.Srock.Commands.RedeceStock;
 
 namespace Application.Order.Commands
 {
     public class ConfirmShippingCommandHandler : IRequestHandler<ConfirmShippingCommand, bool>
     {
         private readonly IApplicationDbContext _context;
-        public ConfirmShippingCommandHandler(IApplicationDbContext context)
+        private readonly IMediator _mediator;
+
+        public ConfirmShippingCommandHandler(IApplicationDbContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator;
         }
-         public async Task<bool> Handle(ConfirmShippingCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(ConfirmShippingCommand request, CancellationToken cancellationToken)
         {
             var order = await _context.Orders
                 .FirstOrDefaultAsync(o => o.Id == request.OrderId, cancellationToken);
@@ -19,6 +24,20 @@ namespace Application.Order.Commands
             if (order == null || order.IsShipped)
             {
                 return false;
+            }
+
+            foreach (var item in order.OrderItems)
+            {
+                var reduceDto = new ReduceStockDto
+                {
+                    ProductOptionId = item.ProductOptionId,
+                    Quantity = item.Quantity
+                };
+
+                var result = await _mediator.Send(new ReduceStockCommand(reduceDto), cancellationToken);
+
+                if (!result)
+                    throw new Exception($"Failed to reduce stock for ProductOptionId: {item.ProductOptionId}");
             }
 
             order.IsShipped = true;

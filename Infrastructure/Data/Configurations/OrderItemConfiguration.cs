@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Configurations
 {
@@ -24,6 +19,11 @@ namespace Infrastructure.Data.Configurations
                 .WithMany() 
                 .HasForeignKey(oi => oi.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(oi => oi.ProductOption)
+               .WithMany()
+               .HasForeignKey(oi => oi.ProductOptionId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

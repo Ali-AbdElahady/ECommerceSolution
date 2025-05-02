@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Srock.Commands.ReserveStock
 {
-    public record ReserveStockCommand(ReserveStockDto reserveStockDto) : IRequest<bool>;
+    public record ReserveStockCommand(List<ReserveStockDto> reserveStockDtos) : IRequest<bool>;
     public class ReserveStockCommandHandler
     {
         private readonly IApplicationDbContext _context;
@@ -19,16 +19,18 @@ namespace Application.Srock.Commands.ReserveStock
         }
         public async Task<bool> Handle(ReserveStockCommand request, CancellationToken cancellationToken)
         {
-            var productId = request.reserveStockDto.ProductOptionId;
-            var quantityToReserve = request.reserveStockDto.Quantity;
+            foreach (var dto in request.reserveStockDtos)
+            {
+                var option = await _context.ProductOptions
+                    .Include(po => po.Stock)
+                    .FirstOrDefaultAsync(po => po.Id == dto.ProductOptionId, cancellationToken);
 
-            var productOption = await _context.ProductOptions
-                .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
+                if (option == null || option.Stock == null || option.Stock.Quantity < dto.Quantity)
+                    return false;
 
-            if (productOption == null || productOption.Stock.Quantity < quantityToReserve)
-                return false;
-
-            productOption.Stock.Quantity -= quantityToReserve;
+                option.Stock.Quantity -= dto.Quantity;
+                option.Stock.Reserved += dto.Quantity;
+            }
 
             await _context.SaveChangesAsync(cancellationToken);
             return true;

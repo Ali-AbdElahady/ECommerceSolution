@@ -1,5 +1,4 @@
-﻿using Application.DTOs.Order;
-using Application.DTOs.Product;
+﻿
 using Application.Order.Commands;
 using Application.Order.Queries;
 using Application.Orders.Commands.CreateOrder;
