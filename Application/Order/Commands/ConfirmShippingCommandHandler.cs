@@ -10,11 +10,15 @@ namespace Application.Order.Commands
     {
         private readonly IApplicationDbContext _context;
         private readonly IMediator _mediator;
+        private readonly INotificationService _notificationService;
 
-        public ConfirmShippingCommandHandler(IApplicationDbContext context, IMediator mediator)
+        public ConfirmShippingCommandHandler(IApplicationDbContext context,
+            IMediator mediator,
+            INotificationService notificationService)
         {
             _context = context;
             _mediator = mediator;
+            _notificationService = notificationService;
         }
         public async Task<bool> Handle(ConfirmShippingCommand request, CancellationToken cancellationToken)
         {
@@ -42,6 +46,10 @@ namespace Application.Order.Commands
 
             order.IsShipped = true;
             await _context.SaveChangesAsync(cancellationToken);
+
+
+            // token of the clinet
+            await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", "token of Cleint");
 
             return true;
         }

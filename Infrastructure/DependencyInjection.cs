@@ -29,6 +29,7 @@ using Application.Srock.Commands.RedeceStock;
 using Application.Srock.Queries;
 using Application.Products.Queries.GetProducts;
 using Application.Orders.Commands.CreateOrder;
+using Infrastructure.Services;
 
 namespace Infrastructure
 {
@@ -123,6 +124,10 @@ namespace Infrastructure
                         }
                     };
                 });
+
+
+            FirebaseInitializer.Initialize();
+            Services.AddScoped<INotificationService, FirebaseNotificationService>();
 
             Services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             Services.AddSingleton(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);

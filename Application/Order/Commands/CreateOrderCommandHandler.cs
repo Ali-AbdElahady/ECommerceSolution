@@ -20,10 +20,15 @@ namespace Application.Orders.Commands.CreateOrder
     {
         private readonly IApplicationDbContext _context;
         private readonly IMediator _mediator;
-        public CreateOrderCommandHandler(IApplicationDbContext context, IMediator mediator)
+        private readonly INotificationService _notificationService;
+
+        public CreateOrderCommandHandler(IApplicationDbContext context, 
+            IMediator mediator,
+            INotificationService notificationService)
         {
             _context = context; 
             _mediator = mediator;
+            _notificationService = notificationService;
         }
 
         public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -69,6 +74,8 @@ namespace Application.Orders.Commands.CreateOrder
             {
                 throw new Exception("Unable to reserve stock for one or more items.");
             }
+            // token of sales manager
+            await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", "token of sales manager");
 
             return order.Id;
         }
