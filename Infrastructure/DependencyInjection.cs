@@ -29,6 +29,8 @@ using Application.Srock.Commands.RedeceStock;
 using Application.Srock.Queries;
 using Application.Products.Queries.GetProducts;
 using Application.Orders.Commands.CreateOrder;
+using Application.Interfaces;
+using Infrastructure.Services;
 
 namespace Infrastructure
 {
@@ -36,6 +38,8 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection Services, IConfiguration configuration)
         {
+            Services.AddScoped<IProductService, ProductService>();
+            Services.AddScoped<ICategoryService, CategoryService>();
             Services.AddScoped<IIdentityService, IdentityService>();
             Services.AddScoped<ApplicationDbContextInitialiser>();
             Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
