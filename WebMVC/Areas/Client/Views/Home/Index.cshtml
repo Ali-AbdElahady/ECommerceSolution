@@ -17,8 +17,11 @@
             {
                 <div class="col-md-4 col-sm-6">
                     <div class="category-card">
-                        <h4>@category.Name</h4>
-                        <a href="#" class="btn btn-primary btn-category">Browse</a>
+                        <img src="/images/@(category.Name).jpg" alt="@category.Name">
+                        <div>
+                            <h4>@category.Name</h4>
+                            <a href="#" class="btn btn-primary btn-category">Browse</a>
+                        </div>
                     </div>
                 </div>
             }
@@ -33,11 +36,13 @@
             {
                 <div class="col-md-4 col-sm-6">
                     <div class="product-card">
-                        <img src="https://via.placeholder.com/300x200" alt="@product.Title">
-                        <h5>@product.Title</h5>
-                        <p>@product.Description</p>
-                        <p><strong>Category:</strong> @product.CategoryName</p>
-                        <a href="#" class="btn btn-success">Add to Cart</a>
+                        <img src="@product.ImagePath[0]" alt="@product.Title">
+                        <div>
+                            <h5>@product.Title</h5>
+                            <p>@product.Description</p>
+                            <p><strong>Category:</strong> @product.CategoryName</p>
+                            <a href="#" class="btn btn-success">Add to Cart</a>
+                        </div>
                     </div>
                 </div>
             }

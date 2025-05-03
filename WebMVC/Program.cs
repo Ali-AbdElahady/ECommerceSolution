@@ -8,7 +8,7 @@ namespace WebMVC
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
@@ -28,6 +28,7 @@ namespace WebMVC
 
             #region Add Midlewares
             app.UseMiddleware<ExceptionHandlingMiddleware>();
+            await app.InitialiseDatabaseAsync();
             #endregion
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
