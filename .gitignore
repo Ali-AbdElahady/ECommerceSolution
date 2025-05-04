@@ -4,6 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # User-specific files
+Infrastructure/Services/ecommercedotnet-firebase-adminsdk-fbsvc-f1c98f41d1.json
+
 *.rsuser
 *.suo
 *.user
