@@ -1,0 +1,51 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <!-- Categories Section -->
+    <section class="my-5">
+        <h2 class="text-center mb-4">Shop by Categories</h2>
+        <div class="row">
+            @foreach (var category in Model.Categories)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="category-card">
+                        <img src="/images/@(category.Name).jpg" alt="@category.Name">
+                        <div>
+                            <h4>@category.Name</h4>
+                            <a href="#" class="btn btn-primary btn-category">Browse</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="my-5">
+        <h2 class="text-center mb-4">Featured Products</h2>
+        <div class="row">
+            @foreach (var product in Model.FeaturedProducts)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="product-card">
+                        <img src="@product.ImagePath[0]" alt="@product.Title">
+                        <div>
+                            <h5>@product.Title</h5>
+                            <p>@product.Description</p>
+                            <p><strong>Category:</strong> @product.CategoryName</p>
+                            <a href="/Client/Product/Details/@product.Id" class="btn btn-success">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+</div>

@@ -176,7 +176,7 @@ namespace Infrastructure.Data
                     ProductCategoryId = categories.First(c => c.Name == "Clothing").Id,
                     Images = new List<Image>
             {
-                new Image { ImagePath = "https://via.placeholder.com/300x300.png?text=T-Shirt" }
+                new Image { ImagePath = "/images/shirt.jpg" }
             },
                     Options = new List<ProductOption>
             {
@@ -194,7 +194,7 @@ namespace Infrastructure.Data
                     ProductCategoryId = categories.First(c => c.Name == "Footwear").Id,
                     Images = new List<Image>
             {
-                new Image { ImagePath = "https://via.placeholder.com/300x300.png?text=Sneakers" }
+                new Image { ImagePath = "/images/Sneakers.jpg" }
             },
                     Options = new List<ProductOption>
             {
@@ -212,7 +212,7 @@ namespace Infrastructure.Data
                     ProductCategoryId = categories.First(c => c.Name == "Accessories").Id,
                     Images = new List<Image>
             {
-                new Image { ImagePath = "https://via.placeholder.com/300x300.png?text=Backpack" }
+                new Image { ImagePath = "/images/Backpack.jpg" }
             },
                     Options = new List<ProductOption>
             {

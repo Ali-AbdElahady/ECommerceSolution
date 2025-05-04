@@ -61,6 +61,7 @@ namespace Application.Products.Queries.GetProducts
                 Id = p.Id,
                 Title = p.Title,
                 Description = p.Description,
+                ImagePath = p.Images.Select(i => i.ImagePath).ToList(),
                 CategoryName = p.ProductCategory.Name
             });
 

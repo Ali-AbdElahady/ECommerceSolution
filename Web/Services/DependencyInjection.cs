@@ -1,10 +1,12 @@
 ﻿using Application.Common.Interfaces;
+using Application.Interfaces;
 using Application.Order.Commands;
 using Application.Order.Queries;
 using Application.Products.Commands.AddProduct;
 using Application.Products.Queries;
 using Application.Products.Queries.GetProductById;
 using FluentValidation;
+using Infrastructure.Services;
 using Microsoft.OpenApi.Models;
 
 namespace Web.Services
@@ -13,42 +15,13 @@ namespace Web.Services
     {
         public static IServiceCollection AddWebServices(this IServiceCollection Services)
         {
+            
             Services.AddScoped<IUser, CurrentUser>();
             Services.AddScoped<IFileService, FileService>();
-            
-            
 
 
-            Services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ecommerce with Clean Architecture", Version = "v1" });
 
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "Enter your JWT token in the format: Bearer {your token here}"
-                });
 
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
-
-            });
 
             return Services;
         }
