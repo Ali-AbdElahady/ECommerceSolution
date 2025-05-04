@@ -1,0 +1,39 @@
+﻿@model List<WebMVC.Areas.Client.Models.CartItemViewModel>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.ProductId" data-size="@item.Size" data-optionid="@item.OptionId">
+                    <td>@item.Title</td>
+                    <td>@item.Size</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        <input type="number" class="form-control quantity-input" value="@item.Quantity" min="1" style="width: 80px;" />
+                    </td>
+                    <td class="subtotal">@(item.Price * item.Quantity).ToString("C")</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger remove-btn">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button class="btn btn-primary" id="update-cart">Update Cart</button>
+}

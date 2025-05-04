@@ -20,7 +20,7 @@
 
             @if (Model.Options != null && Model.Options.Any())
             {
-                <form method="post" asp-controller="Cart" asp-action="Add">
+                <form id="add-to-cart-form">
                     <input type="hidden" name="ProductId" value="@Model.Id" />
 
                     <div class="mb-3">
@@ -55,3 +55,37 @@
         <a href="/Products" class="btn btn-secondary">Back to Products</a>
     </div>
 </div>
+
+<script>
+        document.getElementById('add-to-cart-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        console.log("cart")
+        const productId = document.querySelector('[name="ProductId"]').value;
+        const optionId = document.querySelector('[name="OptionId"]').value;
+        const quantity = document.querySelector('[name="Quantity"]').value;
+
+        if (!optionId || quantity < 1) {
+            alert("Please select an option and a valid quantity.");
+            return;
+        }
+
+        const cartItem = {
+            productId: parseInt(productId),
+            optionId: parseInt(optionId),
+            quantity: parseInt(quantity)
+        };
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        const existing = cart.find(item => item.productId === cartItem.productId && item.optionId === cartItem.optionId);
+        if (existing) {
+            existing.quantity += cartItem.quantity;
+        } else {
+            cart.push(cartItem);
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        alert('Item added to cart!');
+    });
+</script>

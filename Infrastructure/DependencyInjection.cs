@@ -129,7 +129,7 @@ namespace Infrastructure
                 });
 
 
-            FirebaseInitializer.Initialize();
+            //FirebaseInitializer.Initialize(configuration);
             Services.AddScoped<INotificationService, FirebaseNotificationService>();
 
             Services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));

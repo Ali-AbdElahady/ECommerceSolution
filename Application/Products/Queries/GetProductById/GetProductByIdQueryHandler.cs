@@ -37,6 +37,7 @@ namespace Application.Products.Queries
                 ImagePath = product.Images.Select(i => i.ImagePath).ToList(),
                 Options = product.Options.Select(option => new ProductOptionDto
                 {
+                    Id = option.Id,
                     Size = option.Size,
                     Price = option.Price
                 }).ToList()

@@ -69,5 +69,6 @@ namespace WebMVC.Areas.Client.Controllers
 
             return View(viewModel);
         }
+
     }
 }
