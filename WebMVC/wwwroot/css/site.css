@@ -72,3 +72,23 @@ body {
 .category-card img {
     width: 100%;
 }
+
+
+/*product details*/
+.product-detail {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    padding: 30px;
+    background-color: #fff;
+}
+
+.product-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.product-options ul {
+    padding-left: 1.2rem;
+}

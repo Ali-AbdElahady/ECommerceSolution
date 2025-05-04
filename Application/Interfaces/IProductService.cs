@@ -6,5 +6,6 @@ namespace Application.Interfaces
     public interface IProductService
     {
         Task<PaginatedList<ProductDto>> GetFeaturedProductsAsync(ProductFilterDto filter);
+        Task<ProductDto?> GetProductByIdAsync(int id);
     }
 }

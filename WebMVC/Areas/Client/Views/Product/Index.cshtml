@@ -1,0 +1,70 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model WebMVC.Areas.Client.Models.ProductViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "All Products";
+}
+<div class="container my-5">
+    <h2 class="text-center mb-4">All Products</h2>
+
+    <!-- Filter Form -->
+    <form method="get" class="row g-3 mb-4">
+        
+        <div class="col-md-4">
+            <select name="categoryId" class="form-select">
+                <option value="">All Categories</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id" @(Model.CategoryId == category.Id ? "selected" : "")>
+                        @category.Name
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+
+    <!-- Product Grid -->
+    <div class="row">
+        @if (Model.Products.Any())
+        {
+            foreach (var product in Model.Products)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="product-card">
+                        <img src="@product.ImagePath[0]" alt="@product.Title">
+                        <h5>@product.Title</h5>
+                        <p>@product.Description</p>
+                        <p><strong>Category:</strong> @product.CategoryName</p>
+                        <a href="/Client/Product/Details/@product.Id" class="btn btn-success">View Details</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center">No products found.</p>
+        }
+    </div>
+</div>
+<div>
+    <cs-pager cs-paging-pagesize="@Model.PageSize"
+              cs-paging-pagenumber="@Model.PageNumber"
+              cs-paging-totalitems="@Model.Count"
+              cs-pagenumber-param="pageNumber"
+              asp-controller="Hospitals"
+              asp-action="Index"
+              cs-pager-li-current-class="page-item active"
+              cs-pager-li-other-class="page-item"
+              cs-pager-li-non-active-class="page-item disabled"
+              cs-pager-link-current-class="page-link"
+              cs-pager-link-other-class="page-link">
+
+    </cs-pager>
+</div>

@@ -1,0 +1,57 @@
+﻿@model WebMVC.Areas.Client.Models.ProductDetailsViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container my-5">
+    <div class="product-detail row">
+        <div class="col-md-6">
+            @if (Model.ImagePath != null && Model.ImagePath.Any())
+            {
+                <img src="@Model.ImagePath[0]" alt="@Model.Title" class="product-image" />
+            }
+        </div>
+
+        <div class="col-md-6">
+            <h2>@Model.Title</h2>
+            <p class="text-muted">@Model.Description</p>
+            <p><strong>Category:</strong> @Model.CategoryName</p>
+
+            @if (Model.Options != null && Model.Options.Any())
+            {
+                <form method="post" asp-controller="Cart" asp-action="Add">
+                    <input type="hidden" name="ProductId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label for="OptionId" class="form-label"><strong>Select Size & Price</strong></label>
+                        <select class="form-select" id="OptionId" name="OptionId" required>
+                            <option disabled selected value="">-- Choose an option --</option>
+                            @foreach (var option in Model.Options)
+                            {
+                                <option value="@option.Id">
+                                    Size: @option.Size - Price: @option.Price.ToString("C")
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Quantity" class="form-label"><strong>Quantity</strong></label>
+                        <input type="number" class="form-control" id="Quantity" name="Quantity" value="1" min="1" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Add to Cart</button>
+                </form>
+            }
+            else
+            {
+                <p class="text-danger">No options available for this product.</p>
+            }
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="/Products" class="btn btn-secondary">Back to Products</a>
+    </div>
+</div>

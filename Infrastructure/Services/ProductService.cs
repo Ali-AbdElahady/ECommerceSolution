@@ -1,6 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.DTOs.Product;
 using Application.Interfaces;
+using Application.Products.Queries.GetProductById;
 using Application.Products.Queries.GetProducts;
 using MediatR;
 
@@ -20,6 +21,12 @@ namespace Infrastructure.Services
             var query = new ProductsQuery(filter);
             var result = await _mediator.Send(query);
             return result;
+        }
+
+        public async Task<ProductDto?> GetProductByIdAsync(int id)
+        {
+            var query = new GetProductByIdQuery(id); 
+            return await _mediator.Send(query);
         }
     }
 }
