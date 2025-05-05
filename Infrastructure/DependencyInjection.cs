@@ -164,8 +164,11 @@ namespace Infrastructure
 
             Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("User", policy => policy.RequireRole("User"));
+                options.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
+                options.AddPolicy("CLient", policy => policy.RequireRole("CLient"));
+                options.AddPolicy("SalesManager", policy => policy.RequireRole("SalesManager"));
+                options.AddPolicy("InventoryManager", policy => policy.RequireRole("InventoryManager"));
+
             });
             #endregion
 

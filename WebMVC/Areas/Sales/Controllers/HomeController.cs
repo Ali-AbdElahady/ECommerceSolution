@@ -27,11 +27,16 @@ namespace WebMVC.Areas.Sales.Controllers
             var viewModel = orders.Select(order => new OrderListViewModel
             {
                 Id = order.Id,
+                CustomerId = order.Customer.Id,
+                CustomerEmail = order.Customer.Email,
+                CustomerPhoneNumber = order.Customer.PhoneNumber,
+                CustomerUserName = order.Customer.UserName,
                 OrderDate = order.OrderDate,
                 IsShipped = order.IsShipped,
                 Items = order.Items.Select(i => new OrderItemViewModel
                 {
                     ProductId = i.ProductId,
+                    ProductTitle = i.ProductTitle,
                     Quantity = i.Quantity,
                     Price = i.Price
                 }).ToList()
@@ -39,5 +44,15 @@ namespace WebMVC.Areas.Sales.Controllers
 
             return View(viewModel);
         }
+
+        [HttpPost("ConfirmOrder")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmOrder(int orderId)
+        {
+            await _orderService.ConfirmOrderAsync(orderId);
+            return Ok(); 
+        }
+
     }
+
 }

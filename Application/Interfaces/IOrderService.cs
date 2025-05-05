@@ -11,5 +11,6 @@ namespace Application.Interfaces
     {
         Task CreateOrderAsync(CreateOrderDto orderDto);
         Task<List<OrderDto>> GetAllOrdersAsync();
+        Task ConfirmOrderAsync(int orderId);
     }
 }

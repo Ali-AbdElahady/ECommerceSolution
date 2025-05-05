@@ -29,7 +29,7 @@
                         <li class="nav-item" hidden="@(!User.IsInRole("Client"))">
                             <a class="nav-link text-dark" asp-area="Client" asp-controller="Cart" asp-action="Index">Cart</a>
                         </li>
-                        <li class="nav-item" hidden="@(!User.IsInRole("SalesManager") ))">
+                        <li class="nav-item" hidden="@(!User.IsInRole("SalesManager"))">
                             <a class="nav-link text-dark" asp-area="Sales" asp-controller="Home" asp-action="Index">Orders</a>
                         </li>
                     </ul>
