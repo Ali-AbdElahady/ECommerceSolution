@@ -18,6 +18,7 @@ namespace WebMVC
             
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
 
             #region add services
             builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -47,6 +48,7 @@ namespace WebMVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -60,6 +62,7 @@ namespace WebMVC
                 context.Response.Redirect("/Client/Home/Index");
                 return Task.CompletedTask;
             });
+            app.MapRazorPages();
             app.Run();
         }
     }

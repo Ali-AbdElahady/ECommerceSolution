@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.Stock;
+using Application.Srock.Commands.ReleaseStock;
 using Domain.Entities;
 using FluentValidation.Results;
 using MediatR;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Srock.Commands.ReserveStock
 {
     public record ReserveStockCommand(List<ReserveStockDto> reserveStockDtos) : IRequest<bool>;
-    public class ReserveStockCommandHandler
+    public class ReserveStockCommandHandler : IRequestHandler<ReserveStockCommand, bool>
     {
         private readonly IApplicationDbContext _context;
 

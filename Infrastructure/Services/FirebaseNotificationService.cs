@@ -13,10 +13,10 @@ namespace Infrastructure.Services
         public FirebaseNotificationService(IConfiguration configuration)
         {
             var credentialsPath = configuration["Firebase:CredentialsPath"];
-            _firebaseApp = FirebaseApp.Create(new AppOptions
-            {
-                Credential = GoogleCredential.FromFile(credentialsPath)
-            });
+            //_firebaseApp = FirebaseApp.Create(new AppOptions
+            //{
+            //    Credential = GoogleCredential.FromFile(credentialsPath)
+            //});
         }
         public async Task SendNotificationAsync(string title, string body, string userToken)
         {

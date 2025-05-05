@@ -15,51 +15,127 @@
     <div id="cart-content">
         @await Html.PartialAsync("_CartTable", Model)
     </div>
+    
+        <div class="mt-3 text-end">
+            <button class="btn btn-success d-none" id="checkout">Checkout</button>
+        </div>
+    
 </div>
 
 @section Scripts {
-        <script>
-                
+    <script>
+                $(document).ready(function () {
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            if (cart.length > 0) {
+                console.log("cart after Delete",cart);
+                $("#checkout").removeClass("d-none");
+            }
+        });
+            // remove item from cart
+            $(document).on("click", ".remove-btn", function () {
+                console.log("Remove button clicked");
+                const row = $(this).closest("tr");
 
-                $(document).on("click", ".remove-btn", function () {
-                    console.log("Remove button clicked");
-                    const row = $(this).closest("tr");
+                const productId = row.data("id");
+                console.log("productId",productId);
 
+                const size = row.data("size");
+                console.log("size",size);
+
+                const optionId = row.data("optionid");
+                console.log("optionid",optionid);
+
+                let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+                console.log("cart",cart);
+
+                cart = cart.filter(item => !(item.ProductId === productId && item.OptionId === optionId));
+                localStorage.setItem("cart", JSON.stringify(cart));
+                console.log("cart after Delete",JSON.parse(localStorage.getItem("cart") || "[]"));
+                location.reload();
+            });
+
+            // Add item to cart
+            $(document).on("click", "#update-cart", function () {
+                const rows = $("tbody tr");
+                let cart = [];
+
+                rows.each(function () {
+                    const row = $(this);
                     const productId = row.data("id");
-                    console.log("productId",productId);
-
-                    const size = row.data("size");
-                    console.log("size",size);
-
                     const optionid = row.data("optionid");
-                    console.log("optionid",optionid);
+                    const quantity = parseInt(row.find(".quantity-input").val());
+                    console.log(optionid,"optionid")
+                    if (!isNaN(quantity) && quantity > 0) {
+                    cart.push({ ProductId: productId, OptionId: optionId, Quantity: quantity });
 
-                    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-                    console.log("cart",cart);
-
-        cart = cart.filter(item => !(item.productId === productId && item.optionid === optionid));
-                    localStorage.setItem("cart", JSON.stringify(cart));
-                    console.log("cart after Delete",JSON.parse(localStorage.getItem("cart") || "[]"));
-                    location.reload();
+                    }
                 });
+                console.log(cart,"cart updated")
+                localStorage.setItem("cart", JSON.stringify(cart));
+                location.reload();
+            });
 
-                $(document).on("click", "#update-cart", function () {
-                    const rows = $("tbody tr");
-                    let cart = [];
 
-                    rows.each(function () {
-                        const row = $(this);
-                        const productId = row.data("id");
-                        const optionid = row.data("optionid");
-                        const quantity = parseInt(row.find(".quantity-input").val());
-                        console.log(optionid,"optionid")
-                        if (!isNaN(quantity) && quantity > 0) {
-                        cart.push({ productId, optionid, quantity });
+
+            // check out
+        //         $(document).on("click", "#checkout", function () {
+        //     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+        //     if (cart.length === 0) {
+        //         alert("Your cart is empty.");
+        //         return;
+        //     }
+        //     console.log("Cart content before checkout:", cart);
+        //     fetch("/Client/Cart/Checkout", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         },
+        //         body: JSON.stringify(cart)
+        //     })
+        //     .then(res => {
+        //         if (res.status === 401) return res.json().then(data => { window.location.href = data.redirectUrl; });
+        //         return res.json();
+        //     })
+        //     .then(data => {
+        //         if (data.success) {
+        //             alert(data.message);
+        //             localStorage.removeItem("cart");
+        //             window.location.href = "/Client/Orders"; redirect to order history or confirmation
+        //         }
+        //     })
+        //     .catch(err => console.error("Checkout failed", err));
+        // });
+
+            $(document).on("click", "#checkout", function () {
+                    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+                    if (cart.length === 0) {
+                        alert("Your cart is empty.");
+                        return;
+                    }
+
+                    console.log("Cart content before checkout:", cart);
+
+                    $.ajax({
+                        url: '/Client/Cart/Checkout',
+                        method: 'POST',
+                        contentType: 'application/json', // Set content type to JSON
+                        data: JSON.stringify(cart), // Serialize the cart array to JSON
+                        success: function (response) {
+                            localStorage.removeItem("cart"); // ✅ Clear cart after success
+                            window.location.href = "/Client/Cart/ThankYou"; // Redirect to thank you page
+                        },
+                        error: function (err) {
+                            if (err.status === 401 && err.responseJSON?.redirectUrl) {
+                                window.location.href = err.responseJSON.redirectUrl;
+                            } else {
+                                alert("Failed to checkout. Please try again.");
+                            }
                         }
                     });
-                    console.log(cart,"cart updated")
-                    localStorage.setItem("cart", JSON.stringify(cart));
-                    location.reload();
                 });
-        </script>
+
+
+    </script>
 }

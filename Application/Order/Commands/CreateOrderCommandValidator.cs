@@ -13,8 +13,8 @@ namespace Application.Order.Commands
         public CreateOrderCommandValidator()
         {
             RuleFor(x => x.CustomerId)
-                .NotEmpty().WithMessage("CustomerId is required.")
-                .Must(id => int.TryParse(id, out _)).WithMessage("CustomerId must be a valid integer.");
+            .NotEmpty().WithMessage("CustomerId is required.")
+            .Must(id => !string.IsNullOrWhiteSpace(id)).WithMessage("CustomerId must be a valid non-empty string.");
 
             RuleFor(x => x.Items).NotEmpty().WithMessage("At least one order item is required.");
 

@@ -27,13 +27,21 @@ else
                     <td>
                         <input type="number" class="form-control quantity-input" value="@item.Quantity" min="1" style="width: 80px;" />
                     </td>
-                    <td class="subtotal">@(item.Price * item.Quantity).ToString("C")</td>
+                    <td class="subtotal">@((item.Price * item.Quantity).ToString("C"))</td>
                     <td>
                         <button class="btn btn-sm btn-danger remove-btn">Remove</button>
                     </td>
                 </tr>
             }
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-end"><strong>Total:</strong></td>
+                <td colspan="2">
+                    @Model.Sum(i => i.Price * i.Quantity).ToString("C")
+                </td>
+            </tr>
+        </tfoot>
     </table>
     <button class="btn btn-primary" id="update-cart">Update Cart</button>
 }

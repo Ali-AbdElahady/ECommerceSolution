@@ -38,6 +38,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection Services, IConfiguration configuration)
         {
+            Services.AddScoped<IOrderService, OrderService>();
             Services.AddScoped<IProductService, ProductService>();
             Services.AddScoped<ICategoryService, CategoryService>();
             Services.AddScoped<IIdentityService, IdentityService>();
@@ -48,9 +49,7 @@ namespace Infrastructure
                                                                 configuration.GetConnectionString("DefaultConnection"),
                                                                 ServerVersion.AutoDetect(configuration.GetConnectionString("DefaultConnection"))));
 
-            Services.AddIdentity<ApplicationUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
+            
 
             Services.AddValidatorsFromAssemblyContaining<AddProductCommandValidator>();
             Services.AddValidatorsFromAssemblyContaining<ConfirmShippingCommandValidator>();
@@ -79,7 +78,9 @@ namespace Infrastructure
                     typeof(ReduceStockCommandHandler).Assembly,
                     typeof(GetStockQuery).Assembly,
                     typeof(ProductsQueryHandler).Assembly,
-                    typeof(CreateOrderCommandHandler).Assembly
+                    typeof(CreateOrderCommandHandler).Assembly,
+                    typeof(ReserveStockCommandHandler).Assembly
+
 
 
 
@@ -93,49 +94,88 @@ namespace Infrastructure
             });
 
 
+            #region for JWT Add Authentication
+            //Services.AddAuthentication(options =>
+            //                                    {
+            //                                        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //                                        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //                                    })
+            //    .AddJwtBearer(options =>
+            //    {
+            //        var jwtSettings = configuration.GetSection("JwtSettings");
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuer = true,
+            //            ValidateAudience = true,
+            //            ValidateLifetime = true,
+            //            ValidateIssuerSigningKey = true,
+            //            ValidIssuer = jwtSettings["Issuer"],
+            //            ValidAudience = jwtSettings["Audience"],
+            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]))
+            //        };
 
-            Services.AddAuthentication(options =>
-                                                {
-                                                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                                                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                                                })
-                .AddJwtBearer(options =>
-                {
-                    var jwtSettings = configuration.GetSection("JwtSettings");
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwtSettings["Issuer"],
-                        ValidAudience = jwtSettings["Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]))
-                    };
+            //        options.Events = new JwtBearerEvents
+            //        {
+            //            OnAuthenticationFailed = context =>
+            //            {
+            //                context.NoResult(); // Stop the default behavior
 
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = context =>
-                        {
-                            context.NoResult(); // Stop the default behavior
+            //                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            //                context.Response.ContentType = "application/json";
 
-                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                            context.Response.ContentType = "application/json";
+            //                var result = JsonSerializer.Serialize(new { message = "Invalid or expired token." });
+            //                return context.Response.WriteAsync(result);
+            //            }
+            //        };
+            //    });
+            #endregion
 
-                            var result = JsonSerializer.Serialize(new { message = "Invalid or expired token." });
-                            return context.Response.WriteAsync(result);
-                        }
-                    };
-                });
+            #region for Identity Authentication
+            Services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
 
+            //Services.AddAuthentication(options =>
+            //{
+            //    // Set the default authentication scheme to cookies for Identity
+            //    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+            //    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
 
-            //FirebaseInitializer.Initialize(configuration);
+            //    // Add JWT as an additional scheme for API requests
+            //    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+            //})
+            //.AddCookie(IdentityConstants.ApplicationScheme, options =>
+            //{
+            //    options.LoginPath = "/Identity/Account/Login";
+            //    options.LogoutPath = "/Identity/Account/Logout";
+            //    options.ExpireTimeSpan = TimeSpan.FromDays(14);
+            //    options.SlidingExpiration = true;
+            //});
+
+            Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Name = "EcommerceMVC";
+            });
+
+            Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("User", policy => policy.RequireRole("User"));
+            });
+            #endregion
+
+            FirebaseInitializer.Initialize(configuration);
             Services.AddScoped<INotificationService, FirebaseNotificationService>();
 
             Services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             Services.AddSingleton(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);
 
-            Services.AddAuthorization();
+            
             return Services;
         }
     }

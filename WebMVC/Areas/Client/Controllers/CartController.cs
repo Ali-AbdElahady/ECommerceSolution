@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.DTOs.Order;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Areas.Client.Models;
 
@@ -9,10 +10,12 @@ namespace WebMVC.Areas.Client.Controllers
     public class CartController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IOrderService _orderService;
 
-        public CartController(IProductService productService)
+        public CartController(IProductService productService,IOrderService orderService)
         {
             _productService = productService;
+            _orderService = orderService;
         }
 
         [HttpGet]
@@ -49,12 +52,41 @@ namespace WebMVC.Areas.Client.Controllers
             return PartialView("_CartTable", viewModel); // render partial HTML and return
         }
 
+        
+
         [HttpPost]
         [Route("Checkout")]
-        public IActionResult Checkout([FromBody] List<CartItemDto> cartItems)
+        public async Task<IActionResult> Checkout([FromBody] List<CreateOrderItemDto> items)
         {
-            // Save order to DB or process checkout
-            return Ok(new { success = true, message = "Order placed successfully." });
+            if (!User.Identity.IsAuthenticated)
+            {
+                //return Unauthorized(new { redirectUrl = Url.Page("/Account/Login", new { area = "Identity", returnUrl = "/Client/Cart" }) });
+                return Unauthorized(new
+                {
+                    redirectUrl = Url.Action("Login", "Account", new { area = "Identity", returnUrl = "/Client/Cart" })
+                });
+
+            }
+
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            var orderDto = new CreateOrderDto
+            {
+                CustomerId = userId,
+                Items = items
+            };
+
+            // Call your order service
+            await _orderService.CreateOrderAsync(orderDto);
+
+            return Ok(new { redirectUrl = Url.Action("ThankYou", "Cart", new { area = "Client" }) });
+        }
+
+        [HttpGet]
+        [Route("ThankYou")]
+        public IActionResult ThankYou()
+        {
+            return View();
         }
     }
 }
