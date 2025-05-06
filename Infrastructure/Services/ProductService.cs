@@ -42,18 +42,7 @@ namespace Infrastructure.Services
             var command = new UpdateProductCommand
             {
                 Id = id,
-                Product = new AddProductDto
-                {
-                    Title = viewModel.Title,
-                    Description = viewModel.Description,
-                    ProductCategoryId = viewModel.ProductCategoryId,
-                    Images = viewModel.Images, // List<IFormFile>
-                    Options = viewModel.Options.Select(o => new ProductOptionDto
-                    {
-                        Size = o.Size,
-                        Price = o.Price,
-                    }).ToList()
-                }
+                Product = viewModel
             };
 
             await _mediator.Send(command);

@@ -20,7 +20,7 @@ namespace Application.Products.Queries
         public async Task<ProductDto> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
             var product = await _context.Products
-                .Include(p => p.Options).Include(p => p.Images)
+                .Include(p => p.Options).ThenInclude(o=>o.Stock).Include(p => p.Images)
                 .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             if (product == null)
@@ -39,7 +39,8 @@ namespace Application.Products.Queries
                 {
                     Id = option.Id,
                     Size = option.Size,
-                    Price = option.Price
+                    Price = option.Price,
+                    StockQuantity = option.Stock.Quantity
                 }).ToList()
             };
 

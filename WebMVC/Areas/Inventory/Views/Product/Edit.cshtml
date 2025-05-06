@@ -28,8 +28,26 @@
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
 
+        @if (Model.ExistingImages != null && Model.ExistingImages.Any())
+        {
+            <div class="mb-3">
+                <label class="form-label">Existing Images</label>
+                <div class="row">
+                    @for (int i = 0; i < Model.ExistingImages.Count; i++)
+                    {
+                        <div class="col-md-3 mb-2 m-auto text-center">
+                            <img src="@Model.ExistingImages[i]" class="img-thumbnail mb-1" alt="Product Image" style="max-height: 150px;" />
+
+                            
+                            <input type="hidden" name="ExistingImages[@i]" value="@Model.ExistingImages[i]" />
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
         <div class="mb-3">
-            <label class="form-label">Upload New Images (optional)</label>
+            <label class="form-label">Upload New Images</label>
             <input type="file" name="Images" class="form-control" multiple />
         </div>
 

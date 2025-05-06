@@ -152,6 +152,7 @@ namespace WebMVC.Areas.Inventory.Controllers
                 Title = product.Title,
                 Description = product.Description,
                 CategoryId = product.ProductCategoryId,
+                ExistingImages = product.ImagePath ?? new List<string>(),
                 Categories = categories.Items.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
@@ -169,7 +170,7 @@ namespace WebMVC.Areas.Inventory.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductCreateViewModel model)
         {
@@ -184,13 +185,14 @@ namespace WebMVC.Areas.Inventory.Controllers
                 }).ToList();
                 return View(model);
             }
-
+            
             var dto = new AddProductDto
             {
                 Title = model.Title,
                 Description = model.Description,
                 ProductCategoryId = model.CategoryId,
                 Images = model.Images,
+                ExistingImagePaths = model.ExistingImages,
                 Options = model.Options.Select(o => new ProductOptionDto
                 {
                     Size = o.Size,

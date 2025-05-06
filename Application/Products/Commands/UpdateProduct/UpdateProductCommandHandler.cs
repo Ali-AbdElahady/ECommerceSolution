@@ -39,7 +39,19 @@ namespace Application.Products.Commands.UpdateProduct
             product.Description = request.Product.Description;
             product.ProductCategoryId = request.Product.ProductCategoryId;
 
-            // Add new images
+            // Clear and rebuild image list
+            product.Images.Clear();
+
+            // Add preserved images
+            if (request.Product.ExistingImagePaths != null)
+            {
+                foreach (var path in request.Product.ExistingImagePaths)
+                {
+                    product.Images.Add(new Image { ImagePath = path });
+                }
+            }
+
+            // Add new uploaded images
             if (request.Product.Images != null)
             {
                 foreach (var image in request.Product.Images)

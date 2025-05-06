@@ -11,5 +11,6 @@ namespace WebMVC.Areas.Inventory.Models
         public List<SelectListItem> Categories { get; set; } = new();
         public List<IFormFile>? Images { get; set; }
         public List<ProductOptionInputModel> Options { get; set; } = new();
+        public List<string>? ExistingImages { get; set; } = new(); // Add this
     }
 }
