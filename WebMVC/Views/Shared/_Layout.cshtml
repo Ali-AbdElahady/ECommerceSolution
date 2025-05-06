@@ -55,6 +55,26 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-messaging-compat.js"></script>
+
+    <script>
+        // Firebase config
+        debugger;
+        const firebaseConfig = {
+                  apiKey: "AIzaSyC7zvvOt5Yc2x11QokkbjWuj-vr029-LX8",
+                    authDomain: "ecommercedotnet.firebaseapp.com",
+                    projectId: "ecommercedotnet",
+                    storageBucket: "ecommercedotnet.firebasestorage.app",
+                    messagingSenderId: "776317849693",
+                    appId: "1:776317849693:web:f8e1f99ac16efd68867db4",
+                    measurementId: "G-B937NZ07R1"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
