@@ -3,6 +3,7 @@ using Web.Services;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace WebMVC
 {
@@ -23,6 +24,11 @@ namespace WebMVC
             #region add services
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddWebServices();
+
+            builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 104857600; // 100 MB
+            });
             #endregion
 
             var app = builder.Build();
@@ -62,6 +68,7 @@ namespace WebMVC
                 context.Response.Redirect("/Client/Home/Index");
                 return Task.CompletedTask;
             });
+            
             app.MapRazorPages();
             app.Run();
         }

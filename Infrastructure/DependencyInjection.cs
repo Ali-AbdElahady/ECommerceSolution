@@ -31,6 +31,7 @@ using Application.Products.Queries.GetProducts;
 using Application.Orders.Commands.CreateOrder;
 using Application.Interfaces;
 using Infrastructure.Services;
+using Application.Products.Commands.UpdateProduct;
 
 namespace Infrastructure
 {
@@ -79,7 +80,9 @@ namespace Infrastructure
                     typeof(GetStockQuery).Assembly,
                     typeof(ProductsQueryHandler).Assembly,
                     typeof(CreateOrderCommandHandler).Assembly,
-                    typeof(ReserveStockCommandHandler).Assembly
+                    typeof(ReserveStockCommandHandler).Assembly,
+                    typeof(UpdateProductCommandHandler).Assembly
+
 
 
 

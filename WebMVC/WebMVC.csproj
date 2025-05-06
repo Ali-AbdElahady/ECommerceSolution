@@ -38,15 +38,19 @@
 
   <ItemGroup>
     <Folder Include="Areas\Client\Data\" />
-    <Folder Include="Areas\Inventory\Controllers\" />
     <Folder Include="Areas\Inventory\Data\" />
-    <Folder Include="Areas\Inventory\Models\" />
-    <Folder Include="Areas\Inventory\Views\" />
     <Folder Include="Areas\Sales\Data\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Services\ecommercedotnet-firebase-adminsdk-fbsvc-f1c98f41d1.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Inventory\Views\_ViewImports.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,104 @@
+﻿@model WebMVC.Areas.Inventory.Models.ProductCreateViewModel
+@{
+    ViewData["Title"] = "Edit Product";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Edit Product</h2>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Category</label>
+            <select asp-for="CategoryId" class="form-select" asp-items="Model.Categories"></select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Upload New Images (optional)</label>
+            <input type="file" name="Images" class="form-control" multiple />
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Product Options</label>
+            <div id="optionsContainer">
+                @if (Model.Options != null && Model.Options.Any())
+                {
+                    @for (int i = 0; i < Model.Options.Count; i++)
+                    {
+                        <div class="row mb-2 option-row">
+                            <div class="col-md-3">
+                                <input name="Options[@i].Size" value="@Model.Options[i].Size" class="form-control" placeholder="Size" />
+                            </div>
+                            <div class="col-md-3">
+                                <input name="Options[@i].Price" value="@Model.Options[i].Price" class="form-control" placeholder="Color" />
+                            </div>
+                            <div class="col-md-3">
+                                <input name="Options[@i].StockQuantity" type="number" value="@Model.Options[i].StockQuantity" class="form-control" placeholder="Stock" />
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-danger remove-option">X</button>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No product options available.</p>
+                }
+            </div>
+            <button type="button" id="addOptionBtn" class="btn btn-secondary btn-sm mt-2">Add Option</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        let optionIndex = @Model.Options.Count;
+
+        document.getElementById("addOptionBtn").addEventListener("click", function () {
+            const container = document.getElementById("optionsContainer");
+            const row = document.createElement("div");
+            row.className = "row mb-2 option-row";
+            row.innerHTML = `
+                <div class="col-md-3">
+                    <input name="Options[${optionIndex}].Size" class="form-control" placeholder="Size" />
+                </div>
+                <div class="col-md-3">
+                    <input name="Options[${optionIndex}].Color" class="form-control" placeholder="Color" />
+                </div>
+                <div class="col-md-3">
+                    <input name="Options[${optionIndex}].StockQuantity" class="form-control" type="number" placeholder="Stock" />
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-danger remove-option">X</button>
+                </div>`;
+            container.appendChild(row);
+            optionIndex++;
+        });
+
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("remove-option")) {
+                e.target.closest(".option-row").remove();
+            }
+        });
+    </script>
+}

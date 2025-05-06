@@ -32,6 +32,9 @@
                         <li class="nav-item" hidden="@(!User.IsInRole("SalesManager"))">
                             <a class="nav-link text-dark" asp-area="Sales" asp-controller="Home" asp-action="Index">Orders</a>
                         </li>
+                        <li class="nav-item" hidden="@(!User.IsInRole("InventoryManager"))">
+                            <a class="nav-link text-dark" asp-area="Inventory" asp-controller="Product" asp-action="Index">Inventory</a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

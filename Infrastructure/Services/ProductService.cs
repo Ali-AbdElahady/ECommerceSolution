@@ -1,6 +1,8 @@
 ﻿using Application.Common.Models;
 using Application.DTOs.Product;
 using Application.Interfaces;
+using Application.Products.Commands.AddProduct;
+using Application.Products.Commands.UpdateProduct;
 using Application.Products.Queries.GetProductById;
 using Application.Products.Queries.GetProducts;
 using MediatR;
@@ -27,6 +29,34 @@ namespace Infrastructure.Services
         {
             var query = new GetProductByIdQuery(id); 
             return await _mediator.Send(query);
+        }
+        public async Task<int> CreateProductAsync(AddProductDto productDto)
+        {
+            var command = new AddProductCommand(productDto);
+            var productId = await _mediator.Send(command);
+            return productId;
+        }
+
+        public async Task UpdateProductAsync(int id, AddProductDto viewModel)
+        {
+            var command = new UpdateProductCommand
+            {
+                Id = id,
+                Product = new AddProductDto
+                {
+                    Title = viewModel.Title,
+                    Description = viewModel.Description,
+                    ProductCategoryId = viewModel.ProductCategoryId,
+                    Images = viewModel.Images, // List<IFormFile>
+                    Options = viewModel.Options.Select(o => new ProductOptionDto
+                    {
+                        Size = o.Size,
+                        Price = o.Price,
+                    }).ToList()
+                }
+            };
+
+            await _mediator.Send(command);
         }
     }
 }

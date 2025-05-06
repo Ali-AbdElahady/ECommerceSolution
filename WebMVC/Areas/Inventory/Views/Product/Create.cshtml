@@ -1,0 +1,105 @@
+﻿@model WebMVC.Areas.Inventory.Models.ProductCreateViewModel
+
+@{
+    ViewData["Title"] = "Add Product";
+    Layout = "_Layout";
+
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Add New Product</h2>
+
+    <form asp-area="Inventory" asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Title</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Category</label>
+            <select asp-for="CategoryId" class="form-select" asp-items="Model.Categories">
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Product Images</label>
+            <input asp-for="Images" id="imageInput" class="form-control" multiple />
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Product Options (Sizes & Price)</label>
+            <div id="optionsContainer">
+                <div class="row mb-2 option-row">
+                    <div class="col-md-3">
+                        <input name="Options[0].Size" class="form-control" placeholder="Size (e.g. S, M, L)" />
+                    </div>
+                    <div class="col-md-3">
+                        <input name="Options[0].Price" class="form-control" type="number" placeholder="Price" />
+                    </div>
+                    <div class="col-md-3">
+                        <input name="Options[0].StockQuantity" class="form-control" type="number" placeholder="Stock Quantity" />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger remove-option">X</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="addOptionBtn" class="btn btn-secondary btn-sm mt-2">Add Option</button>
+        </div>
+        <noscript>
+            <p>JavaScript is disabled in your browser. Some features may not work as expected.</p>
+        </noscript>
+        <button type="submit" class="btn btn-success">Save Product</button>
+        <a asp-area="Inventory" asp-controller="Product" asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+                document.getElementById("imageInput").addEventListener("change", function (event) {
+                    // debugger;
+                    const files = event.target.files;
+                    console.log(files);
+                });
+
+        let optionIndex = 1;
+
+        document.getElementById("addOptionBtn").addEventListener("click", function () {
+            const container = document.getElementById("optionsContainer");
+            const row = document.createElement("div");
+            row.className = "row mb-2 option-row";
+            row.innerHTML = `
+                <div class="col-md-3">
+                    <input name="Options[${optionIndex}].Size" class="form-control" placeholder="Size (e.g. S, M, L)" />
+                </div>
+                <div class="col-md-3">
+                    <input name="Options[${optionIndex}].Price" class="form-control" type="number" placeholder="Price" />
+                </div>
+                <div class="col-md-3">
+                    <input name="Options[${optionIndex}].StockQuantity" class="form-control" type="number" placeholder="Stock Quantity" />
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger remove-option">X</button>
+                </div>`;
+            container.appendChild(row);
+            optionIndex++;
+        });
+
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("remove-option")) {
+                e.target.closest(".option-row").remove();
+            }
+        });
+    </script>
+}

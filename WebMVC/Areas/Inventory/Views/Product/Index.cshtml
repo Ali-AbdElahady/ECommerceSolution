@@ -1,0 +1,93 @@
+﻿@model WebMVC.Areas.Client.Models.ProductViewModel
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Product List</h2>
+        <a href="/Inventory/Product/Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Add Product
+        </a>
+    </div>
+
+    <form method="get" class="mb-3 row">
+        <div class="col-md-4">
+            <select class="form-select" name="CategoryId" onchange="this.form.submit()">
+                <option value="">-- All Categories --</option>
+                @foreach (var cat in Model.Categories)
+                {
+                    <option value="@cat.Id">
+                        @cat.Name
+                    </option>
+                }
+            </select>
+        </div>
+        <input type="hidden" name="PageSize" value="@Model.PageSize" />
+        <input type="hidden" name="PageNumber" value="1" />
+    </form>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Sizes</th>
+                <th>Images</th>
+                <th class="text-center" style="width: 150px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.Title</td>
+                    <td>@product.CategoryName</td>
+                    <td>
+                        @foreach (var opt in product.Options)
+                        {
+                            <span class="badge bg-info text-dark me-1">@opt.Size (@opt.Price)</span>
+                        }
+                    </td>
+                    <td>
+                        @if (product.ImagePath.Any())
+                        {
+                            <img src="@Url.Content(product.ImagePath.First())" alt="Product Image" style="width: 60px; height: 60px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Image</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <a asp-area="Inventory" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning me-1">
+                            Edit
+                        </a>
+                        <form method="post" asp-area="Inventory" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <cs-pager cs-paging-pagesize="@Model.PageSize"
+                  cs-paging-pagenumber="@Model.PageNumber"
+                  cs-paging-totalitems="@Model.Count"
+                  cs-pagenumber-param="pageNumber"
+                  asp-controller="Hospitals"
+                  asp-action="Index"
+                  cs-pager-li-current-class="page-item active"
+                  cs-pager-li-other-class="page-item"
+                  cs-pager-li-non-active-class="page-item disabled"
+                  cs-pager-link-current-class="page-link"
+                  cs-pager-link-other-class="page-link">
+
+        </cs-pager>
+    </div>
+</div>

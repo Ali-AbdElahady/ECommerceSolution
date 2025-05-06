@@ -11,5 +11,7 @@ namespace Application.DTOs.Product
         public int Id { get; set; }
         public string Size { get; set; }
         public decimal Price { get; set; }
+        public int StockQuantity { get; set; }
+
     }
 }

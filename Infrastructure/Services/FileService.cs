@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Application.Common.Interfaces;
+using Domain.Entities;
 
 public class FileService : IFileService
 {
@@ -47,7 +48,6 @@ public class FileService : IFileService
         {
             await image.CopyToAsync(fileStream);
         }
-
         
         return "/images/" + fileName;
     }
