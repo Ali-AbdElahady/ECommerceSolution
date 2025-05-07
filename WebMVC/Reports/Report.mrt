@@ -1,0 +1,876 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <CalculationMode>Interpretation</CalculationMode>
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <orderData Ref="2" type="Stimulsoft.Report.Dictionary.StiJsonDatabase" isKey="true">
+        <Alias>orderData</Alias>
+        <HeadersString />
+        <Name>orderData</Name>
+        <PathData>C:\Users\aliah\OneDrive\Desktop\orderData.json</PathData>
+      </orderData>
+    </Databases>
+    <DataSources isList="true" count="3">
+      <root Ref="3" type="DataTableSource" isKey="true">
+        <Alias>root</Alias>
+        <Columns isList="true" count="5">
+          <value>Id,System.Decimal</value>
+          <value>OrderDate,System.DateTime</value>
+          <value>IsShipped,System.Boolean</value>
+          <value>Customer,System.String</value>
+          <value>Items,System.String</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <Key>9d80e4614c4245a3a78b3ba91cb940eb</Key>
+        <Name>root</Name>
+        <NameInSource>orderData.root</NameInSource>
+      </root>
+      <root_Customer Ref="4" type="DataTableSource" isKey="true">
+        <Alias>root_Customer</Alias>
+        <Columns isList="true" count="5">
+          <value>Id,System.String</value>
+          <value>Email,System.String</value>
+          <value>UserName,System.String</value>
+          <value>PhoneNumber,System.String</value>
+          <value>relationId,System.String</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <Key>53aef44aa26b422abf6dc00420d490f4</Key>
+        <Name>root_Customer</Name>
+        <NameInSource>orderData.root_Customer</NameInSource>
+      </root_Customer>
+      <root_Items Ref="5" type="DataTableSource" isKey="true">
+        <Alias>root_Items</Alias>
+        <Columns isList="true" count="6">
+          <value>ProductId,System.Decimal</value>
+          <value>ProductOptionId,System.Decimal</value>
+          <value>ProductTitle,System.String</value>
+          <value>Quantity,System.Decimal</value>
+          <value>Price,System.Decimal</value>
+          <value>relationId,System.String</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <Key>01ca45f032ec42a59c4029c760ee0281</Key>
+        <Name>root_Items</Name>
+        <NameInSource>orderData.root_Items</NameInSource>
+      </root_Items>
+    </DataSources>
+    <Relations isList="true" count="2">
+      <root Ref="6" type="DataRelation" isKey="true">
+        <Alias>root</Alias>
+        <ChildColumns isList="true" count="1">
+          <value>relationId</value>
+        </ChildColumns>
+        <ChildSource isRef="4" />
+        <Dictionary isRef="1" />
+        <Name>root</Name>
+        <NameInSource>root_Customer</NameInSource>
+        <ParentColumns isList="true" count="1">
+          <value>Customer</value>
+        </ParentColumns>
+        <ParentSource isRef="3" />
+      </root>
+      <root Ref="7" type="DataRelation" isKey="true">
+        <Alias>root</Alias>
+        <ChildColumns isList="true" count="1">
+          <value>relationId</value>
+        </ChildColumns>
+        <ChildSource isRef="5" />
+        <Dictionary isRef="1" />
+        <Name>root</Name>
+        <NameInSource>root_Items</NameInSource>
+        <ParentColumns isList="true" count="1">
+          <value>Items</value>
+        </ParentColumns>
+        <ParentSource isRef="3" />
+      </root>
+    </Relations>
+    <Report isRef="0" />
+    <Resources isList="true" count="0" />
+    <UserFunctions isList="true" count="0" />
+    <Variables isList="true" count="0" />
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <Key>127190cd63ad4d7f8d60990cbf8fdf9a</Key>
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="8" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="1">
+        <DataBand1 Ref="9" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,0.2,7.72,3.2</ClientRectangle>
+          <Components isList="true" count="18">
+            <Text1 Ref="10" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,-0.1,3.4,0.5</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,28,Bold</Font>
+              <Name>Text1</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Sales Oder Report</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text1>
+            <Text2 Ref="11" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,0.6,1.1,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20,Bold</Font>
+              <Name>Text2</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Order#</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text2>
+            <Text3 Ref="12" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>3.8,0.6,1.6,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Name>Text3</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Order Date:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text3>
+            <Text4 Ref="13" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>3.8,1,1.6,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Name>Text4</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Shipped:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text4>
+            <Text5 Ref="14" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,1.5,1.4,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20,Bold</Font>
+              <Name>Text5</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Customer</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text5>
+            <Text6 Ref="15" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,1,3,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <Name>Text6</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>{root.Id}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text6>
+            <Text7 Ref="16" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.4,0.6,2.2,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <Name>Text7</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>{root.OrderDate}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+            </Text7>
+            <Text8 Ref="17" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.4,1,2.2,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <Name>Text8</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>{root.IsShipped}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text8>
+            <Text9 Ref="18" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,1.9,0.9,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Name>Text9</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Name:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text9>
+            <Text10 Ref="19" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,2.3,0.9,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Name>Text10</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Email:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text10>
+            <Text11 Ref="20" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1.1,1.9,6.2,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <Name>Text11</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>{root_Customer.UserName}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+            </Text11>
+            <Text12 Ref="21" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1.1,2.3,6.2,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <Name>Text12</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>{root_Customer.Email}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+            </Text12>
+            <Text13 Ref="22" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,2.7,0.9,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Name>Text13</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Phone:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text13>
+            <Text14 Ref="23" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1.1,2.7,6.2,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20</Font>
+              <Name>Text14</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>{root_Customer.PhoneNumber}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+            </Text14>
+            <Text15 Ref="24" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,3,1.4,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20,Bold</Font>
+              <Name>Text15</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Product</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text15>
+            <Text16 Ref="25" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.7,3,1.4,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20,Bold</Font>
+              <Name>Text16</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Qty</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text16>
+            <Text17 Ref="26" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.2,3,1.4,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Arial,20,Bold</Font>
+              <Name>Text17</Name>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <Text>Price</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text17>
+            <Table1 Ref="27" type="Stimulsoft.Report.Components.Table.StiTable" isKey="true">
+              <Border>All;Black;2;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,3.4,7.5,3</ClientRectangle>
+              <ColumnCount>3</ColumnCount>
+              <Components isList="true" count="30">
+                <Table1_Cell1 Ref="28" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,0,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>0</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell1</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <Text>{root_Items.ProductTitle}</Text>
+                  <TextBrush>Black</TextBrush>
+                  <Type>DataColumn</Type>
+                </Table1_Cell1>
+                <Table1_Cell2 Ref="29" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,0,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>1</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell2</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <Text>{root_Items.Quantity}</Text>
+                  <TextBrush>Black</TextBrush>
+                  <Type>Expression</Type>
+                </Table1_Cell2>
+                <Table1_Cell3 Ref="30" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,0,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>2</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell3</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <Text>{root_Items.Price}</Text>
+                  <TextBrush>Black</TextBrush>
+                  <Type>Expression</Type>
+                </Table1_Cell3>
+                <Table1_Cell4 Ref="31" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,0.3,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>5</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell4</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell4>
+                <Table1_Cell5 Ref="32" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,0.3,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>6</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell5</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell5>
+                <Table1_Cell6 Ref="33" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,0.3,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>7</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell6</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell6>
+                <Table1_Cell7 Ref="34" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,0.6,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>10</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell7</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell7>
+                <Table1_Cell8 Ref="35" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,0.6,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>11</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell8</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell8>
+                <Table1_Cell9 Ref="36" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,0.6,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>12</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell9</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell9>
+                <Table1_Cell10 Ref="37" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,0.9,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>15</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell10</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell10>
+                <Table1_Cell11 Ref="38" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,0.9,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>16</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell11</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell11>
+                <Table1_Cell12 Ref="39" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,0.9,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>17</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell12</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell12>
+                <Table1_Cell13 Ref="40" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,1.2,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>20</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell13</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell13>
+                <Table1_Cell14 Ref="41" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,1.2,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>21</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell14</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell14>
+                <Table1_Cell15 Ref="42" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,1.2,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>22</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell15</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell15>
+                <Table1_Cell16 Ref="43" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,1.5,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>25</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell16</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell16>
+                <Table1_Cell17 Ref="44" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,1.5,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>26</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell17</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell17>
+                <Table1_Cell18 Ref="45" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,1.5,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>27</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell18</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell18>
+                <Table1_Cell19 Ref="46" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,1.8,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>28</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell19</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell19>
+                <Table1_Cell20 Ref="47" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,1.8,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>29</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell20</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell20>
+                <Table1_Cell21 Ref="48" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,1.8,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>30</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell21</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell21>
+                <Table1_Cell22 Ref="49" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,2.1,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>31</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell22</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell22>
+                <Table1_Cell23 Ref="50" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,2.1,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>32</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell23</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell23>
+                <Table1_Cell24 Ref="51" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,2.1,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>33</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell24</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell24>
+                <Table1_Cell25 Ref="52" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,2.4,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>34</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell25</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell25>
+                <Table1_Cell26 Ref="53" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,2.4,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>35</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell26</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell26>
+                <Table1_Cell27 Ref="54" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,2.4,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>36</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell27</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell27>
+                <Table1_Cell28 Ref="55" type="TableCell" isKey="true">
+                  <Border>All;Transparent;1;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>0,2.7,4.53,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>37</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell28</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell28>
+                <Table1_Cell29 Ref="56" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>4.53,2.7,1.63,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>38</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell29</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell29>
+                <Table1_Cell30 Ref="57" type="TableCell" isKey="true">
+                  <Border>All;Transparent;2;Solid;False;4;Transparent</Border>
+                  <Brush>White</Brush>
+                  <ClientRectangle>6.15,2.7,1.33,0.3</ClientRectangle>
+                  <Conditions isList="true" count="0" />
+                  <Expressions isList="true" count="0" />
+                  <Font>Arial,16</Font>
+                  <ID>39</ID>
+                  <JoinCells isList="true" count="0" />
+                  <Name>Table1_Cell30</Name>
+                  <Page isRef="8" />
+                  <Parent isRef="27" />
+                  <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+                  <TextBrush>Black</TextBrush>
+                </Table1_Cell30>
+              </Components>
+              <Conditions isList="true" count="0" />
+              <DataRelationName isNull="true" />
+              <DataSourceName>root_Items</DataSourceName>
+              <DockableTable>False</DockableTable>
+              <Expressions isList="true" count="0" />
+              <Filters isList="true" count="0" />
+              <MinHeight>1</MinHeight>
+              <Name>Table1</Name>
+              <NumberID>40</NumberID>
+              <Page isRef="8" />
+              <Parent isRef="9" />
+              <RowCount>10</RowCount>
+              <Sort isList="true" count="0" />
+            </Table1>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Expressions isList="true" count="0" />
+          <Filters isList="true" count="0" />
+          <Name>DataBand1</Name>
+          <Page isRef="8" />
+          <Parent isRef="8" />
+          <Sort isList="true" count="0" />
+        </DataBand1>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Expressions isList="true" count="0" />
+      <Guid>16edd9de789f4a5ba1bcb34826ea862d</Guid>
+      <Margins>0.39,0.39,0.39,0.39</Margins>
+      <Name>Page1</Name>
+      <PageHeight>11</PageHeight>
+      <PageWidth>8.5</PageWidth>
+      <PaperSize>Letter</PaperSize>
+      <Report isRef="0" />
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="58" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true" />
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportAuthor>Ali Ahmed</ReportAuthor>
+  <ReportChanged>5/7/2025 9:12:53 AM</ReportChanged>
+  <ReportCreated>5/7/2025 8:40:34 AM</ReportCreated>
+  <ReportFile>C:\Users\aliah\OneDrive\Desktop\Report.mrt</ReportFile>
+  <ReportGuid>54ab7179bd52479e86111df8659dba11</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Inches</ReportUnit>
+  <ReportVersion>2025.2.3.0</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

@@ -27,50 +27,49 @@ namespace Application.Products.Queries.GetProducts
 
         public async Task<PaginatedList<ProductDto>> Handle(ProductsQuery request, CancellationToken cancellationToken)
         {
+            var filter = request.Filter;
+
+            // Apply filtering directly on the projected query
             var query = _context.Products
-                .Include(p => p.ProductCategory)
-                .AsQueryable();
+                .AsNoTracking()
+                .Where(p =>
+                    (string.IsNullOrWhiteSpace(filter.Title) || p.Title.Contains(filter.Title)) &&
+                    (!filter.CategoryId.HasValue || p.ProductCategoryId == filter.CategoryId.Value)
+                )
+                .Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Description = p.Description,
+                    ImagePath = p.Images.Select(i => i.ImagePath).ToList(),
+                    CategoryName = p.ProductCategory.Name
+                });
 
-            if (!string.IsNullOrWhiteSpace(request.Filter.Title))
-                query = query.Where(p => p.Title.Contains(request.Filter.Title));
-
-            if (request.Filter.CategoryId.HasValue)
-                query = query.Where(p => p.ProductCategoryId == request.Filter.CategoryId.Value);
-
-            switch (request.Filter.SortBy?.ToLower())
+            // Sorting
+            if (!string.IsNullOrWhiteSpace(filter.SortBy))
             {
-                case "title":
-                    query = request.Filter.SortDescending
+                query = filter.SortBy.ToLower() switch
+                {
+                    "title" => filter.SortDescending
                         ? query.OrderByDescending(p => p.Title)
-                        : query.OrderBy(p => p.Title);
-                    break;
+                        : query.OrderBy(p => p.Title),
 
-                case "category":
-                    query = request.Filter.SortDescending
-                        ? query.OrderByDescending(p => p.ProductCategory.Name)
-                        : query.OrderBy(p => p.ProductCategory.Name);
-                    break;
+                    "category" => filter.SortDescending
+                        ? query.OrderByDescending(p => p.CategoryName)
+                        : query.OrderBy(p => p.CategoryName),
 
-                default:
-                    query = query.OrderBy(p => p.Id);
-                    break;
+                    _ => query.OrderBy(p => p.Id)
+                };
+            }
+            else
+            {
+                query = query.OrderBy(p => p.Id);
             }
 
-            var dtoQuery = query.Select(p => new ProductDto
-            {
-                Id = p.Id,
-                Title = p.Title,
-                Description = p.Description,
-                ImagePath = p.Images.Select(i => i.ImagePath).ToList(),
-                CategoryName = p.ProductCategory.Name
-            });
-
             return await PaginatedList<ProductDto>.CreateAsync(
-                dtoQuery,
-                request.Filter.PageNumber,
-                request.Filter.PageSize);
+                query,
+                filter.PageNumber,
+                filter.PageSize);
         }
     }
-
-
 }

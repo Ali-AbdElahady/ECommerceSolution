@@ -65,6 +65,10 @@
                             {
                                 <p class="text-success mt-3"><strong>Shipment already confirmed.</strong></p>
                             }
+
+                            <a class="btn btn-primary btn-sm mt-2" href="@Url.Action("OrderReport", "Home", new { area = "Sales", orderId = order.Id })" target="_blank">
+                                View Report
+                            </a>
                         </div>
                     </div>
                 </div>

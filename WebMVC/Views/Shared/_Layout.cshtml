@@ -58,23 +58,93 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-messaging-compat.js"></script>
-
+    @{
+        var justLoggedIn = TempData["JustLoggedIn"] as bool? ?? false;
+    }
     <script>
-        // Firebase config
-        debugger;
+        // Firebase configuration
         const firebaseConfig = {
-                  apiKey: "AIzaSyC7zvvOt5Yc2x11QokkbjWuj-vr029-LX8",
-                    authDomain: "ecommercedotnet.firebaseapp.com",
-                    projectId: "ecommercedotnet",
-                    storageBucket: "ecommercedotnet.firebasestorage.app",
-                    messagingSenderId: "776317849693",
-                    appId: "1:776317849693:web:f8e1f99ac16efd68867db4",
-                    measurementId: "G-B937NZ07R1"
+            apiKey: "AIzaSyC7zvvOt5Yc2x11QokkbjWuj-vr029-LX8",
+            authDomain: "ecommercedotnet.firebaseapp.com",
+            projectId: "ecommercedotnet",
+            storageBucket: "ecommercedotnet.firebaseapp.com",
+            messagingSenderId: "776317849693",
+            appId: "1:776317849693:web:f8e1f99ac16efd68867db4",
+            measurementId: "G-B937NZ07R1"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
+
+        // Register the service worker
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch((err) => {
+                console.error('Service Worker registration failed:', err);
+            });
+
+        // Handle notification permissions and token registration
+        const justLoggedIn = @(justLoggedIn.ToString().ToLower());
+        if (justLoggedIn === true) {
+            debugger;
+            if (Notification.permission === "default") {
+                Notification.requestPermission()
+                    .then((permission) => {
+                        if (permission === "granted") {
+                            console.log("Notification permission granted.");
+                            return messaging.getToken({ vapidKey: "BJVsmMRFl4dXK5iflLhj6tl-o4A6EbYCH5_Mk5JpdzLZ-tzhIX5L5qH7uythbuC7Z03JRCWvgC57BTSRUJR2T34" });
+                        } else {
+                            console.warn("Notification permission denied.");
+                        }
+                    })
+                    .then((currentToken) => {
+                        if (currentToken) {
+                            console.log("FCM Token:", currentToken);
+                            // Send the token to the server
+                            fetch('/notification/register-token', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ token: currentToken })
+                            });
+                        } else {
+                            console.warn("No token received.");
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("Error during FCM setup:", err);
+                    });
+            } else if (Notification.permission === "granted") {
+                messaging.getToken({ vapidKey: "BJVsmMRFl4dXK5iflLhj6tl-o4A6EbYCH5_Mk5JpdzLZ-tzhIX5L5qH7uythbuC7Z03JRCWvgC57BTSRUJR2T34" })
+                    .then((currentToken) => {
+                        if (currentToken) {
+                            console.log("FCM Token:", currentToken);
+                            // Send the token to the server
+                            fetch('/notification/register-token', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ token: currentToken })
+                            });
+                        } else {
+                            console.warn("No token received.");
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("Error during FCM setup:", err);
+                    });
+            } else {
+                console.warn("Notifications are blocked.");
+            }
+        }
     </script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

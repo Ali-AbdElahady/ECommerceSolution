@@ -19,30 +19,30 @@ namespace Application.Products.Queries
 
         public async Task<ProductDto> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
-                .Include(p => p.Options).ThenInclude(o=>o.Stock).Include(p => p.Images)
-                .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+            var productDto = await _context.Products
+                .AsNoTracking()
+                .Where(p => p.Id == request.Id)
+                .Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Description = p.Description,
+                    ProductCategoryId = p.ProductCategoryId,
+                    ImagePath = p.Images.Select(i => i.ImagePath).ToList(),
+                    Options = p.Options.Select(option => new ProductOptionDto
+                    {
+                        Id = option.Id,
+                        Size = option.Size,
+                        Price = option.Price,
+                        StockQuantity = option.Stock.Quantity
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync(cancellationToken);
 
-            if (product == null)
+            if (productDto == null)
             {
                 throw new NotFoundException(nameof(Product), request.Id);
             }
-
-            var productDto = new ProductDto
-            {
-                Id = product.Id,
-                Title = product.Title,
-                Description = product.Description,
-                ProductCategoryId = product.ProductCategoryId,
-                ImagePath = product.Images.Select(i => i.ImagePath).ToList(),
-                Options = product.Options.Select(option => new ProductOptionDto
-                {
-                    Id = option.Id,
-                    Size = option.Size,
-                    Price = option.Price,
-                    StockQuantity = option.Stock.Quantity
-                }).ToList()
-            };
 
             return productDto;
         }

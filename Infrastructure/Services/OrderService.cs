@@ -43,5 +43,11 @@ namespace Infrastructure.Services
             if (!result)
                 throw new Exception("Failed to confirm order shipment.");
         }
+
+        public async Task<OrderDto> GetOrderReportById(int orderId)
+        {
+            return await _mediator.Send(new GetOrderByIdQuery(orderId));
+            
+        }
     }
 }

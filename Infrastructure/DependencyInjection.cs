@@ -81,7 +81,9 @@ namespace Infrastructure
                     typeof(ProductsQueryHandler).Assembly,
                     typeof(CreateOrderCommandHandler).Assembly,
                     typeof(ReserveStockCommandHandler).Assembly,
-                    typeof(UpdateProductCommandHandler).Assembly
+                    typeof(UpdateProductCommandHandler).Assembly,
+                    typeof(GetOrderByIdQueryHandler).Assembly
+
 
 
 

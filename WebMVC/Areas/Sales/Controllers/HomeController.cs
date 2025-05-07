@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Mvc;
 using WebMVC.Areas.Sales.Models;
 
 namespace WebMVC.Areas.Sales.Controllers
@@ -51,6 +53,32 @@ namespace WebMVC.Areas.Sales.Controllers
         {
             await _orderService.ConfirmOrderAsync(orderId);
             return Ok(); 
+        }
+
+        [HttpGet]
+        [Route("OrderReport/{orderId}")]
+        public IActionResult OrderReport(int orderId)
+        {
+            // Load the order DTO from DB or service
+            var order = _orderService.GetOrderReportById(orderId);
+
+            // Create a new report instance
+            var report = new StiReport();
+
+            // Load the report template
+            var reportPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Reports", "SalesOrder.mrt");
+            report.Load(reportPath);
+
+            // Register the business object
+            report.RegBusinessObject("Order", order);
+
+            // Compile and render the report
+            report.Compile();
+            report.Render();
+
+            // Return the report result for the Stimulsoft viewer
+            return StiNetCoreViewer.GetReportResult(this, report);
+            //return Ok();
         }
 
     }

@@ -15,6 +15,7 @@ namespace Application.Srock.Queries
             Filter = filter;
         }
     }
+
     public class GetStockQueryHandler : IRequestHandler<GetStockQuery, PaginatedList<GetStockDto>>
     {
         private readonly IApplicationDbContext _context;
@@ -28,52 +29,45 @@ namespace Application.Srock.Queries
         {
             var filter = request.Filter;
 
+            // Projection is now applied immediately
             var query = _context.Stock
-                .Include(s => s.ProductOption)
-                    .ThenInclude(po => po.Product)
-                .AsQueryable();
-
-            if (filter.ProductId.HasValue)
-                query = query.Where(s => s.ProductOption.ProductId == filter.ProductId.Value);
-
-            if (filter.CategoryId.HasValue)
-                query = query.Where(s => s.ProductOption.Product.ProductCategoryId == filter.CategoryId.Value);
-
-            if (!string.IsNullOrWhiteSpace(filter.SearchKeyword))
-                query = query.Where(s => s.ProductOption.Product.Title.Contains(filter.SearchKeyword));
-
-            if (!string.IsNullOrWhiteSpace(request.Filter.SortBy))
-            {
-                switch (request.Filter.SortBy)
+                .AsNoTracking()
+                .Where(s =>
+                    (!filter.ProductId.HasValue || s.ProductOption.ProductId == filter.ProductId.Value) &&
+                    (!filter.CategoryId.HasValue || s.ProductOption.Product.ProductCategoryId == filter.CategoryId.Value) &&
+                    (string.IsNullOrWhiteSpace(filter.SearchKeyword) || s.ProductOption.Product.Title.Contains(filter.SearchKeyword))
+                )
+                .Select(s => new GetStockDto
                 {
-                    case "ProductName":
-                        query = request.Filter.SortDescending
-                            ? query.OrderByDescending(s => s.ProductOption.Product.Title)
-                            : query.OrderBy(s => s.ProductOption.Product.Title);
-                        break;
-                    case "Available":
-                        query = request.Filter.SortDescending
-                            ? query.OrderByDescending(s => s.Quantity)
-                            : query.OrderBy(s => s.Quantity);
-                        break;
-                    case "Reserved":
-                        query = request.Filter.SortDescending
-                            ? query.OrderByDescending(s => s.Reserved)
-                            : query.OrderBy(s => s.Reserved);
-                        break;
-                }
+                    ProductOptionId = s.ProductOptionId,
+                    ProductTitle = s.ProductOption.Product.Title,
+                    Size = s.ProductOption.Size,
+                    AvailableQuantity = s.Quantity,
+                    ReservedQuantity = s.Reserved
+                });
+
+            // Sorting
+            if (!string.IsNullOrWhiteSpace(filter.SortBy))
+            {
+                query = filter.SortBy switch
+                {
+                    "ProductName" => filter.SortDescending
+                        ? query.OrderByDescending(s => s.ProductTitle)
+                        : query.OrderBy(s => s.ProductTitle),
+
+                    "Available" => filter.SortDescending
+                        ? query.OrderByDescending(s => s.AvailableQuantity)
+                        : query.OrderBy(s => s.AvailableQuantity),
+
+                    "Reserved" => filter.SortDescending
+                        ? query.OrderByDescending(s => s.ReservedQuantity)
+                        : query.OrderBy(s => s.ReservedQuantity),
+
+                    _ => query
+                };
             }
 
-            var resultQuery = query.Select(s => new GetStockDto
-            {
-                ProductOptionId = s.ProductOptionId,
-                ProductTitle = s.ProductOption.Product.Title,
-                Size = s.ProductOption.Size,
-                AvailableQuantity = s.Quantity,
-                ReservedQuantity = s.Reserved
-            });
-
-            return await PaginatedList<GetStockDto>.CreateAsync(resultQuery, filter.PageNumber, filter.PageSize);
+            return await PaginatedList<GetStockDto>.CreateAsync(query, filter.PageNumber, filter.PageSize);
         }
     }
 }
