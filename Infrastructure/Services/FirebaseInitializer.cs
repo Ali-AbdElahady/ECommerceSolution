@@ -17,10 +17,10 @@ namespace Infrastructure.Services
                     throw new InvalidOperationException("Firebase credentials path is not configured.");
                 }
 
-                FirebaseApp.Create(new AppOptions()
-                {
-                    Credential = GoogleCredential.FromFile(credentialsPath)
-                });
+                //FirebaseApp.Create(new AppOptions()
+                //{
+                //    Credential = GoogleCredential.FromFile(credentialsPath)
+                //});
             }
         }
     }

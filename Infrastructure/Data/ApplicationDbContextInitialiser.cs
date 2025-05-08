@@ -109,8 +109,8 @@ namespace Infrastructure.Data
 
             var salesManager = new ApplicationUser
             {
-                UserName = "ali.test.292199@gmail.com",
-                Email = "ali.test.292199@gmail.com",
+                UserName = "SalesManager@localhost",
+                Email = "SalesManager@localhost",
                 EmailConfirmed = true
             };
 
@@ -146,18 +146,6 @@ namespace Infrastructure.Data
                 await _userManager.AddToRolesAsync(client, new[] { Roles.Client });
             }
 
-            var client2 = new ApplicationUser
-            {
-                UserName = "ali.test.292100@gmail.com",
-                Email = "ali.test.292100@gmail.com",
-                EmailConfirmed = true
-            };
-
-            if (_userManager.Users.All(u => u.UserName != client2.UserName))
-            {
-                await _userManager.CreateAsync(client2, "Client1!");
-                await _userManager.AddToRolesAsync(client2, new[] { Roles.Client });
-            }
         }
 
         private async Task SeedCategoriesAsync()
