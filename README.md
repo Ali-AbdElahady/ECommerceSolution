@@ -36,6 +36,38 @@ A robust e-commerce platform built with ASP.NET Core MVC, featuring product mana
 - **Authentication**: ASP.NET Identity
 - **Architecture**: Clean Architecture for better separation of concerns and maintainability
 - **Testing**: Unit and Integration Testing using xUnit and TUnit
+- 
+## 🛠  Project Structure
+ECommerceSolution/
+│
+├── Core/
+│   ├── Entities/
+│   ├── Interfaces/
+│   ├── DTOs/
+│   └── Common/
+│
+├── Infrastructure/
+│   ├── Data/
+│   ├── Services/
+│   └── Repositories/
+│
+├── WebMVC/
+│   ├── Controllers/
+│   ├── Views/
+│   ├── Models/
+│   └── wwwroot/
+│
+├── Application/
+│   ├── Features/
+│   ├── Commands/
+│   └── Queries/
+│
+├── Tests/
+│   ├── UnitTests/
+│   └── IntegrationTests/
+│
+└── ECommerceSolution.sln
+
 
 ## ⚙️ Getting Started
 
@@ -45,6 +77,8 @@ A robust e-commerce platform built with ASP.NET Core MVC, featuring product mana
 - [SQL Server](https://www.microsoft.com/en-us/sql-server)
 - [Node.js](https://nodejs.org/) (for frontend dependencies)
 - [Stimulsoft Designer](https://designer.stimulsoft.com/) (for report designing)
+
+
 
 ### Installation
 
@@ -75,8 +109,39 @@ A robust e-commerce platform built with ASP.NET Core MVC, featuring product mana
    ```
 
 ---
+###  Firebase Integration
+Setup:
+
+Obtain your Firebase service account credentials and place the JSON file in a secure location.
+
+Update appsettings.json:
+
+"Firebase": {
+  "CredentialsPath": "path/to/your/firebase/credentials.json"
+}
+Usage:
+
+Inject INotificationService where needed.
+
+Send notifications:
+await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", salesManagerToken);
+###  Reporting with Stimulsoft
+
 
 ### 🧪 Testing
+Design Reports:
+
+Use Stimulsoft Designer to create .mrt report templates.
+
+Bind data sources like OrderDto to the report.
+Generate Reports:
+var report = new StiReport();
+report.Load("Reports/SalesOrderReport.mrt");
+report.RegBusinessObject("Order", orderDto);
+report.Render();
+report.ExportDocument(StiExportFormat.Pdf, "SalesOrder.pdf");
+
+
 
 The application includes both unit and integration tests to ensure that the core business logic and features are working as expected. The tests follow the principles of Clean Architecture, with clear separation of concerns between the application layers.
 
