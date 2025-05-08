@@ -35,6 +35,9 @@
                         <li class="nav-item" hidden="@(!User.IsInRole("InventoryManager"))">
                             <a class="nav-link text-dark" asp-area="Inventory" asp-controller="Product" asp-action="Index">Inventory</a>
                         </li>
+                        <li class="nav-item" hidden="@(!User.IsInRole("InventoryManager"))">
+                            <a class="nav-link text-dark" asp-area="Inventory" asp-controller="Category" asp-action="Index">Categories</a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -104,7 +107,7 @@
                         if (currentToken) {
                             console.log("FCM Token:", currentToken);
                             // Send the token to the server
-                            fetch('/notification/register-token', {
+                            fetch('/Notification/register-token', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -124,12 +127,12 @@
                         if (currentToken) {
                             console.log("FCM Token:", currentToken);
                             // Send the token to the server
-                            fetch('/notification/register-token', {
+                            fetch('/Notification/register-token', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ token: currentToken })
+                                body: JSON.stringify({ token: currentToken})
                             });
                         } else {
                             console.warn("No token received.");

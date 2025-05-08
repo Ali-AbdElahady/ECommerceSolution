@@ -21,14 +21,16 @@ namespace Application.Orders.Commands.CreateOrder
         private readonly IApplicationDbContext _context;
         private readonly IMediator _mediator;
         private readonly INotificationService _notificationService;
+        private readonly IIdentityService _identityService;
 
         public CreateOrderCommandHandler(IApplicationDbContext context, 
             IMediator mediator,
-            INotificationService notificationService)
+            INotificationService notificationService, IIdentityService identityService)
         {
             _context = context; 
             _mediator = mediator;
             _notificationService = notificationService;
+            _identityService = identityService;
         }
 
         public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -74,8 +76,9 @@ namespace Application.Orders.Commands.CreateOrder
             {
                 throw new Exception("Unable to reserve stock for one or more items.");
             }
+            var salesManager = await _identityService.GetUserByEmailAsync("ali.test.292100@gmail.com");
             // token of sales manager
-            await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", "token of sales manager");
+            await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", salesManager.FCMToken?? "salesManager not logged yet");
 
             return order.Id;
         }

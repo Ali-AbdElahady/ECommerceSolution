@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebMVC.Areas.Inventory.Controllers
 {
-    [Area("Category")]
+    [Area("Inventory")]
     [Authorize(Roles = "InventoryManager")]
-    [Route("Category/Product")]
+    [Route("Inventory/Category")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -19,9 +19,42 @@ namespace WebMVC.Areas.Inventory.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var filter = new CategoryFilterDto(); // Default filter (can be extended)
+            var filter = new CategoryFilterDto(); 
             var result = await _categoryService.GetAllCategoriesAsync(filter);
             return View(result);
+        }
+
+        [HttpPost("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProductCategoryDto categoryDto)
+        {
+            if (!ModelState.IsValid)
+                return View(categoryDto);
+
+            var success = await _categoryService.UpdateCategoryAsync(categoryDto);
+            if (!success)
+            {
+                ModelState.AddModelError("", "Update failed.");
+                return View(categoryDto);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        
+        [HttpGet("Create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create(ProductCategoryDto dto)
+        {
+            if (!ModelState.IsValid)
+                return View(dto);
+
+            await _categoryService.AddCategoryAsync(dto);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

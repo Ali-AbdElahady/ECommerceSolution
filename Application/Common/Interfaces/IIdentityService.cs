@@ -19,6 +19,8 @@ namespace Application.Common.Interfaces
         Task<string> GenerateJwtTokenAsync(string email, string password); 
         Task<string> GetUserEmailByIdAsync(string userId);
         Task<CustomerDto> GetUserByIdAsync(string userId);
+        Task<CustomerDto> GetUserByEmailAsync(string email);
+
 
     }
 }

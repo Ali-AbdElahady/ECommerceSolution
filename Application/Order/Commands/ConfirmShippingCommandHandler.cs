@@ -11,14 +11,16 @@ namespace Application.Order.Commands
         private readonly IApplicationDbContext _context;
         private readonly IMediator _mediator;
         private readonly INotificationService _notificationService;
+        private readonly IIdentityService _identityService;
 
         public ConfirmShippingCommandHandler(IApplicationDbContext context,
             IMediator mediator,
-            INotificationService notificationService)
+            INotificationService notificationService,IIdentityService identityService)
         {
             _context = context;
             _mediator = mediator;
             _notificationService = notificationService;
+            _identityService = identityService;
         }
         public async Task<bool> Handle(ConfirmShippingCommand request, CancellationToken cancellationToken)
         {
@@ -47,9 +49,9 @@ namespace Application.Order.Commands
             order.IsShipped = true;
             await _context.SaveChangesAsync(cancellationToken);
 
-
+            var client = await _identityService.GetUserByIdAsync(order.CustomerId);
             // token of the clinet
-            await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", "token of Cleint");
+            await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", client.FCMToken ?? "fake token");
 
             return true;
         }

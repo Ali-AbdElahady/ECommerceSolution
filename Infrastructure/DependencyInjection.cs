@@ -32,6 +32,7 @@ using Application.Orders.Commands.CreateOrder;
 using Application.Interfaces;
 using Infrastructure.Services;
 using Application.Products.Commands.UpdateProduct;
+using Application.Category.Commands;
 
 namespace Infrastructure
 {
@@ -61,6 +62,8 @@ namespace Infrastructure
             Services.AddValidatorsFromAssemblyContaining<ReduceStockCommandValidator>();
             Services.AddValidatorsFromAssemblyContaining<ProductFilterDtoValidator>();
             Services.AddValidatorsFromAssemblyContaining<CreateOrderCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<UpdateProductCategoryCommandValidator>();
+            Services.AddValidatorsFromAssemblyContaining<AddProductCategoryCommandValidator>();
 
 
 
@@ -82,7 +85,9 @@ namespace Infrastructure
                     typeof(CreateOrderCommandHandler).Assembly,
                     typeof(ReserveStockCommandHandler).Assembly,
                     typeof(UpdateProductCommandHandler).Assembly,
-                    typeof(GetOrderByIdQueryHandler).Assembly
+                    typeof(GetOrderByIdQueryHandler).Assembly,
+                    typeof(UpdateProductCategoryCommandHandler).Assembly
+
 
 
 

@@ -128,5 +128,21 @@ namespace Infrastructure.Identity
             };
         }
 
+        public async Task<CustomerDto> GetUserByEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+                return null;
+
+            return new CustomerDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                FCMToken = user.FCMToken
+            };
+        }
     }
 }

@@ -1,1 +1,61 @@
-﻿
+﻿@model Application.Common.Models.PaginatedList<Application.DTOs.Category.ProductCategoryDto>
+
+@{
+    ViewData["Title"] = "Categories";
+    Layout = "_Layout";
+}
+
+<h2>Categories</h2>
+
+<a class="btn btn-success mb-3" asp-controller="Category" asp-action="Create">Add Category</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items != null && Model.Items.Any())
+        {
+            foreach (var category in Model.Items)
+            {
+                <tr data-id="@category.Id">
+                    <td>@category.Id</td>
+                    <td class="name-display">@category.Name</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-primary edit-btn">Edit</button>
+
+                        <form asp-area="Inventory" asp-controller="Category" asp-action="Edit" method="post" class="edit-form" style="display: none;">
+                            <input type="hidden" name="Id" value="@category.Id" />
+                            <input type="text" name="Name" class="form-control d-inline w-50" value="@category.Name" required />
+                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No categories found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.edit-btn').on('click', function () {
+                var $row = $(this).closest('tr');
+                $row.find('.edit-btn').hide();
+                $('.edit-form').hide();
+                $row.find('.edit-form').show();
+                $row.find('.name-display').hide();
+            });
+        });
+    </script>
+}
