@@ -22,10 +22,12 @@ namespace Application.Srock.Commands.RedeceStock
 
             if (stock == null || stock.Quantity < request.reduceStockDto.Quantity)
             {
-                return false; // Not enough stock to reduce
+                throw new Exception($"the quantity of product with option id {request.reduceStockDto.ProductOptionId} is not enough to reduce");
             }
 
             stock.Quantity -= request.reduceStockDto.Quantity;
+            stock.Reserved -= request.reduceStockDto.Quantity;
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;

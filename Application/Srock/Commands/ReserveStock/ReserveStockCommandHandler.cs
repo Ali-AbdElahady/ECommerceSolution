@@ -26,8 +26,8 @@ namespace Application.Srock.Commands.ReserveStock
                     .Include(po => po.Stock)
                     .FirstOrDefaultAsync(po => po.Id == dto.ProductOptionId, cancellationToken);
 
-                if (option == null || option.Stock == null || option.Stock.Quantity < dto.Quantity)
-                    return false;
+                if (option == null || option.Stock == null || option.Stock.Quantity - option.Stock.Reserved < dto.Quantity)
+                    throw new Exception($"the quantity of product with option id {dto.ProductOptionId} is not enough to reserve");
 
                 option.Stock.Quantity -= dto.Quantity;
                 option.Stock.Reserved += dto.Quantity;

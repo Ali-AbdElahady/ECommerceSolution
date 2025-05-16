@@ -44,6 +44,7 @@ namespace Application.Order.Commands
 
                 if (!result)
                     throw new Exception($"Failed to reduce stock for ProductOptionId: {item.ProductOptionId}");
+
             }
 
             order.IsShipped = true;
