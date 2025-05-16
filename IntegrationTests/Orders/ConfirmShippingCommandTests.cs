@@ -30,6 +30,7 @@ namespace UnitTests.Application.Orders
             var orderData = new List<Order> { order }.AsQueryable();
 
             var mockDbSet = new Mock<DbSet<Order>>();
+            var identityServiceMock = new Mock<IIdentityService>();
             mockDbSet.As<IQueryable<Order>>().Setup(m => m.Provider).Returns(orderData.Provider);
             mockDbSet.As<IQueryable<Order>>().Setup(m => m.Expression).Returns(orderData.Expression);
             mockDbSet.As<IQueryable<Order>>().Setup(m => m.ElementType).Returns(orderData.ElementType);
@@ -43,7 +44,8 @@ namespace UnitTests.Application.Orders
             var handler = new ConfirmShippingCommandHandler(
                 _contextMock.Object,
                 _mediatorMock.Object,
-                _notificationServiceMock.Object
+                _notificationServiceMock.Object,
+                identityServiceMock.Object
             );
 
             var command = new ConfirmShippingCommand { OrderId = 1 };
@@ -66,6 +68,7 @@ namespace UnitTests.Application.Orders
             var emptyOrderData = new List<Order>().AsQueryable();
 
             var emptyMockDbSet = new Mock<DbSet<Order>>();
+            var identityServiceMock = new Mock<IIdentityService>();
             emptyMockDbSet.As<IQueryable<Order>>().Setup(m => m.Provider).Returns(emptyOrderData.Provider);
             emptyMockDbSet.As<IQueryable<Order>>().Setup(m => m.Expression).Returns(emptyOrderData.Expression);
             emptyMockDbSet.As<IQueryable<Order>>().Setup(m => m.ElementType).Returns(emptyOrderData.ElementType);
@@ -76,7 +79,8 @@ namespace UnitTests.Application.Orders
             var handler = new ConfirmShippingCommandHandler(
                 _contextMock.Object,
                 _mediatorMock.Object,
-                _notificationServiceMock.Object
+                _notificationServiceMock.Object,
+                identityServiceMock.Object
             );
 
             var command = new ConfirmShippingCommand { OrderId = 99 };

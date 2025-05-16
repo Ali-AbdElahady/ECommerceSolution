@@ -1,4 +1,4 @@
-﻿// CreateOrderCommandHandler.cs
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.Order;
 using Application.DTOs.Stock;
@@ -7,6 +7,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OrderEntity = Domain.Entities.Order;
+
 namespace Application.Orders.Commands.CreateOrder
 {
     public class CreateOrderCommand : IRequest<int>
@@ -15,7 +16,6 @@ namespace Application.Orders.Commands.CreateOrder
         public List<CreateOrderItemDto> Items { get; set; }
     }
 
-
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int>
     {
         private readonly IApplicationDbContext _context;
@@ -23,11 +23,13 @@ namespace Application.Orders.Commands.CreateOrder
         private readonly INotificationService _notificationService;
         private readonly IIdentityService _identityService;
 
-        public CreateOrderCommandHandler(IApplicationDbContext context, 
+        public CreateOrderCommandHandler(
+            IApplicationDbContext context,
             IMediator mediator,
-            INotificationService notificationService, IIdentityService identityService)
+            INotificationService notificationService,
+            IIdentityService identityService)
         {
-            _context = context; 
+            _context = context;
             _mediator = mediator;
             _notificationService = notificationService;
             _identityService = identityService;
@@ -49,7 +51,7 @@ namespace Application.Orders.Commands.CreateOrder
                     .FirstOrDefaultAsync(o => o.Id == item.OptionId && o.ProductId == item.ProductId, cancellationToken);
 
                 if (option == null)
-                    throw new Exception($"Product option not found for productId={item.ProductId}, optionId={item.OptionId}");
+                    throw new NotFoundException($"Product option not found for productId={item.ProductId}", item.OptionId);
 
                 order.OrderItems.Add(new OrderItem
                 {
@@ -60,9 +62,6 @@ namespace Application.Orders.Commands.CreateOrder
                 });
             }
 
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync(cancellationToken);
-
             var reserveDtos = order.OrderItems.Select(oi => new ReserveStockDto
             {
                 ProductOptionId = oi.ProductOptionId,
@@ -70,15 +69,28 @@ namespace Application.Orders.Commands.CreateOrder
                 OrderId = order.Id
             }).ToList();
 
-            var reserveResult = await _mediator.Send(new ReserveStockCommand(reserveDtos), cancellationToken);
-
-            if (!reserveResult)
+            await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            try
             {
-                throw new Exception("Unable to reserve stock for one or more items.");
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync(cancellationToken);
+
+                var reserveResult = await _mediator.Send(new ReserveStockCommand(reserveDtos), cancellationToken);
+
+                if (!reserveResult)
+                    throw new Exception("Unable to reserve stock for one or more items.");
+
+                await transaction.CommitAsync(cancellationToken);
             }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+
             var salesManager = await _identityService.GetUserByEmailAsync("ali.test.292100@gmail.com");
-            // token of sales manager
-            await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", salesManager.FCMToken?? "salesManager not logged yet");
+            var fcmToken = salesManager.FCMToken ?? "salesManager not logged yet";
+            await _notificationService.SendNotificationAsync("New Order", $"Order #{order.Id} placed", fcmToken);
 
             return order.Id;
         }

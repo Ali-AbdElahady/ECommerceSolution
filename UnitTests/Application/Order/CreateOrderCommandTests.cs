@@ -29,6 +29,7 @@ namespace UnitTests.Application.Orders
             var productOption = new ProductOption { Id = 1, ProductId = 1, Price = 100 };
             var orderDbSetMock = DbContextMock.GetQueryableMockDbSet(new List<Order>());
             var optionDbSetMock = DbContextMock.GetQueryableMockDbSet(new List<ProductOption> { productOption });
+            var identityServiceMock = new Mock<IIdentityService>();
 
             contextMock.Setup(c => c.ProductOptions).Returns(optionDbSetMock.Object);
             contextMock.Setup(c => c.Orders).Returns(orderDbSetMock.Object);
@@ -36,7 +37,7 @@ namespace UnitTests.Application.Orders
             mediatorMock.Setup(m => m.Send(It.IsAny<ReserveStockCommand>(), It.IsAny<CancellationToken>()))
                         .ReturnsAsync(true);
 
-            var handler = new CreateOrderCommandHandler(contextMock.Object, mediatorMock.Object, notificationServiceMock.Object);
+            var handler = new CreateOrderCommandHandler(contextMock.Object, mediatorMock.Object, notificationServiceMock.Object, identityServiceMock.Object);
 
             var command = new CreateOrderCommand
             {

@@ -3,6 +3,7 @@ using Domain.Entities;
 using ECommerceSolution.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Reflection;
 
 namespace Infrastructure.Data
@@ -19,6 +20,7 @@ namespace Infrastructure.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Stock> Stock { get; set; }
+        public DatabaseFacade Database => base.Database;
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
